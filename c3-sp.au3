@@ -352,6 +352,39 @@ Func IsShadowWeaponReadyTwo()
     endif
 endfunc
 
+Func IsDialogBoxAppear()
+    const $SizeSearch = 40
+    const $MinNbPixel = 3
+    const $OptNbPixel = 10
+    const $PosX = 466
+    const $PosY = (1020 - $toSmallY)
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0xE6D9BE, 10)
+
+    const $MaxX = 470
+    const $MinX = 450
+    const $MaxY = (1040 - $toSmallY)
+	const $MinY = (1000 - $toSmallY)
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+ endfunc
+
 Func ChangeShadowWeapon()
 
 	If IsShadowWeaponReadyOne() = False Then
@@ -909,15 +942,15 @@ Func HealMeIfYouCan()
 EndFunc
 
 Func startALTTABProc()
-	Send("{ALTDOWN}{TAB}{TAB}{TAB}{ALTUP}")
+	Send("{ALTDOWN} {TAB} {TAB} {TAB} {ALTUP}")
 	Beep(400, 400)
-   Sleep(Random(2411,3344,1))
-   Send("{ALTDOWN}{TAB}{TAB}{TAB}{ALTUP}")
+   Sleep(Random(2211,2744,1))
+   Send("{ALTDOWN} {TAB} {TAB} {TAB} {ALTUP}")
    Beep(400, 400)
-   Sleep(Random(2941,3344,1))
-   Send("{ALTDOWN}{TAB}{TAB}{ALTUP}")
+   Sleep(Random(2241,2744,1))
+   Send("{ALTDOWN} {TAB} {TAB} {ALTUP}")
    Beep(400, 400)
-   Sleep(Random(1911,2344,1))
+   Sleep(Random(2211,2744,1))
 EndFunc
 
 
@@ -928,10 +961,17 @@ Func InviteWarc()
 
 		$BuffTimer = TimerInit()
 
+		;press F6 on second panels to Invite Warc
 		MouseClick("left", 590, (940 - $toSmallY), 2, 200)
 		Sleep(Random(111,344,1))
 
 	EndIf
+
+	Send("{ALTDOWN} {TAB} {ALTUP}")
+	Beep(250, 400)
+	Sleep(Random(1411,1744,1))
+
+	AcceptInvite()
 
 	$lastBuffTime = TimerDiff($BuffTimer)
 	MischiefManaged()
@@ -940,9 +980,48 @@ EndFunc
 
 Func AcceptInvite()
 
+	local $index = 0
 
+	While True
+
+		If	IsDialogBoxAppear() then
+
+			;press OK on dialog window btn
+			MouseClick("left", 466, (1020 - $toSmallY), 1, 200)
+			Sleep(Random(1000, 2000, 1))
+
+			ExitLoop
+		EndIf
+
+		Sleep(333)
+		MischiefManaged()
+	WEnd
+
+	Buff()
+	LeaveParrty()
+
+	Send("{ALTDOWN} {TAB} {ALTUP}")
+	Beep(250, 400)
+	Sleep(Random(1411,1744,1))
 
 EndFunc
+
+Func Buff()
+
+	;press F7 on second panels
+   MouseClick("left", 625, (940 - $toSmallY), 2, 200)
+   Sleep(Random(1011,1044,1))
+
+EndFunc
+
+Func LeaveParrty()
+
+	;press leave party on F12 third panels
+	MouseClick("left", 822, (890 - $toSmallY), 2, 200)
+	Sleep(Random(211,444,1))
+
+EndFunc
+
 
 
 
@@ -986,8 +1065,8 @@ Sleep(Random(1911,2544,1))
 
 StartSound()
 Sleep(Random(111,344,1))
-
 startALTTABProc()
+InviteWarc()
 
 ;exec()
 Beep(700, 40)
