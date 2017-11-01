@@ -10,9 +10,9 @@
 SRandom(@MSEC)
 global const $LogFile = "debugtest.log"
 ;small = 265 / large = 1
-global const $toSmallY = 1
+global const $toSmallY = 265
 ;small = 275 / large 1
-global const $toSmallX = 1
+global const $toSmallX = 275
 
 global $targetDetected = False
 global $pmOneThreatened = False
@@ -31,6 +31,9 @@ global $stunChance = 0
 
 global $firstSWChanged = False
 global $secondSWChanged = False
+
+global $lastBuffTime = 1140001
+global $BuffTimer = 0
 
 
 
@@ -52,6 +55,24 @@ EndFunc
 func LogWrite($data)
     FileWrite($LogFile, $data & chr(10))
 endfunc
+
+Func InviteWarc()
+
+	;every 19 minutes uses alacrity potion on second panel F7
+	If	$lastBuffTime > 1100000 Then
+
+		$BuffTimer = TimerInit()
+
+		MouseClick("left", 590, (940 - $toSmallY), 2, 200)
+		Sleep(Random(111,344,1))
+
+	EndIf
+
+	$lastBuffTime = TimerDiff($BuffTimer)
+	MischiefManaged()
+
+EndFunc
+
 
 ;proveriaet nalichie pixela krasnogo zveta kak hp v oblasti gde target
 ;true if >1hp na target, false if targeta net ili u targeta net hp ili hp polosi
@@ -512,7 +533,7 @@ EndFunc
 
 Func MakeCameraVerticalAgain()
 
-	If $toSmallY = 1 1 or $toSmallX = 1 Then
+	If $toSmallY = 1 or $toSmallX = 1 Then
 		;large
 		MouseClickDrag ( "right", 950, 420, 950, 550, 200)
 
@@ -1028,7 +1049,8 @@ Sleep(Random(1211,1944,1))
 StartSound()
 Sleep(Random(111,344,1))
 
-exec()
+InviteWarc()
+;exec()
 Beep(700, 40)
 
 ;SuccessSound()
