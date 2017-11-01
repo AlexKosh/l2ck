@@ -9,9 +9,10 @@
 
 SRandom(@MSEC)
 global const $LogFile = "debugtest.log"
-
-global const $toSmallY = 265
-global const $toSmallX = 275
+;small = 265 / large = 1
+global const $toSmallY = 1
+;small = 275 / large 1
+global const $toSmallX = 1
 
 global $targetDetected = False
 global $pmOneThreatened = False
@@ -511,9 +512,16 @@ EndFunc
 
 Func MakeCameraVerticalAgain()
 
-	;MouseClickDrag ( "right", 950, 420, 950, 550, 200)
-	;small
-	MouseClickDrag ( "right", 680, 300, 680, 430, 200)
+	If $toSmallY = 1 1 or $toSmallX = 1 Then
+		;large
+		MouseClickDrag ( "right", 950, 420, 950, 550, 200)
+
+	Else
+		;small
+		MouseClickDrag ( "right", 680, 300, 680, 430, 200)
+
+	EndIf
+
 	Sleep(Random(111,344,1))
 
 EndFunc
@@ -1019,7 +1027,6 @@ Sleep(Random(1211,1944,1))
 
 StartSound()
 Sleep(Random(111,344,1))
-
 
 exec()
 Beep(700, 40)
