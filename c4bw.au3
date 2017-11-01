@@ -459,24 +459,8 @@ Sleep(Random(2211,2944,1))
 StartSound()
 Sleep(Random(111,344,1))
 
-;startALTTABProc()
-While True
-If IsDialogBoxAppear() Then
-   Beep(400, 200)
-   Beep(500, 100)
+startALTTABProc()
 
-   MouseClick("left", 466, 750, 150)
-   Sleep(Random(111,344,1))
-
-   MouseClick("left", 625, (940 - $toSmall), 2, 200)
-   Sleep(Random(18000, 20000, 1))
-   MouseClick("left", 822, (626 - $toSmall), 2, 200)
-   Sleep(Random(111,344,1))
-EndIf
-Sleep(300)
-MischiefManaged()
-WEnd
-
-;exec()
+exec()
 
 StartSound()

@@ -35,6 +35,22 @@ global $secondSWChanged = False
 global $lastBuffTime = 1140001
 global $BuffTimer = 0
 
+global $lastEEHealTime = 30001
+global $healEETimer = 0
+
+;start: 1, fight:1
+global $spolier = 0
+;start: 1, fight: 2
+global $warc = 0
+;start: 2, fight:1
+global $healer = 0
+
+global $safePartyDismiss = 120000
+global $safePDTimer = 0
+
+global $lastWCHealTime = 30001
+global $healWCTimer = 0
+
 
 Func ErrorSound()
 	Beep(1200, 100)
@@ -220,7 +236,7 @@ Func IsMyHPDamaged()
     endif
 endfunc
 
-Func IsMyHPDamagedOver60()
+Func IsMyHPDamagedOver45()
 
     const $SizeSearch = 80
     const $MinNbPixel = 3
@@ -231,7 +247,7 @@ Func IsMyHPDamagedOver60()
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
                          0x421010, 10)
 
-    const $MaxX = 105
+    const $MaxX = 85
     const $MinX = 5
     const $MaxY = 100
 
@@ -252,6 +268,105 @@ Func IsMyHPDamagedOver60()
         return False
     endif
 endfunc
+
+Func IsMyHPDamagedOver60()
+
+    const $SizeSearch = 80
+    const $MinNbPixel = 3
+    const $OptNbPixel = 10
+    const $PosX = 50
+    const $PosY = 75
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x421010, 10)
+
+    const $MaxX = 108
+    const $MinX = 5
+    const $MaxY = 100
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+endfunc
+
+Func IsMyHPDamagedOver80()
+
+    const $SizeSearch = 80
+    const $MinNbPixel = 3
+    const $OptNbPixel = 10
+    const $PosX = 50
+    const $PosY = 75
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x421010, 10)
+
+    const $MaxX = 130
+    const $MinX = 5
+    const $MaxY = 100
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+endfunc
+
+Func IsPMOneOrTwoHPBelow90()
+    const $SizeSearch = 40
+    const $MinNbPixel = 3
+    const $OptNbPixel = 10
+    const $PosX = 110
+    const $PosY = 300
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x5E2936, 10)
+
+    const $MaxX = 150
+    const $MinX = 15
+    const $MaxY = 360
+	const $MinY = 280
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+ endfunc
 
 Func IsMyMPUpper30()
 
@@ -925,6 +1040,7 @@ Func MischiefManaged()
 
 EndFunc
 
+;use healing pot
 Func HealMeIfYouCan()
 
 	If	IsMyHPDamagedOver60() and $lastHealTime > 10000 Then
@@ -941,54 +1057,150 @@ Func HealMeIfYouCan()
 
 EndFunc
 
-Func startALTTABProc()
-	Send("{ALTDOWN} {TAB} {TAB} {TAB} {ALTUP}")
-	Beep(400, 400)
-   Sleep(Random(2211,2744,1))
-   Send("{ALTDOWN} {TAB} {TAB} {TAB} {ALTUP}")
-   Beep(400, 400)
-   Sleep(Random(2241,2744,1))
-   Send("{ALTDOWN} {TAB} {TAB} {ALTUP}")
-   Beep(400, 400)
-   Sleep(Random(2211,2744,1))
+Func Heal()
+	;F9
+	MouseClick("left", 707, (995 - $toSmallY), 2, 200)
+	Sleep(Random(211,444,1))
+
 EndFunc
 
+Func HealMeEEIfYouCan()
 
-Func InviteWarc()
+	If	$lastEEHealTime > 29500 Then
 
-	;every 19 minutes uses alacrity potion on second panel F7
-	If	$lastBuffTime > 1100000 Then
+		If	IsMyHPDamagedOver80() Or IsPMOneOrTwoHPBelow90() Then
 
-		$BuffTimer = TimerInit()
+			ALTTAB($healer)
 
-		;press F6 on second panels to Invite Warc
-		MouseClick("left", 590, (940 - $toSmallY), 2, 200)
-		Sleep(Random(111,344,1))
+			If	$healer = 2 Then
+				$healer = 1
+				$warc = 2
+			EndIf
+
+			$healEETimer = TimerInit()
+
+			Heal()
+			Sleep(Random(511,744,1))
+
+			ALTTAB($spolier)
+
+
+
+		EndIf
+	EndIf
+
+	$lastEEHealTime = TimerDiff($healEETimer)
+	MischiefManaged()
+
+EndFunc
+
+Func HealAndBuffUsWarcIfYouCan()
+
+	If	IsMyHPDamagedOver45() Or $lastBuffTime > 1100000 Then
+
+		InviteWarc()
+
+		ALTTAB($warc)
+		If	$warc = 2 Then
+			$healer = 2
+			$warc = 1
+		EndIf
+
+		AcceptInvite()
+
+		ALTTAB($spolier)
 
 	EndIf
 
-	Send("{ALTDOWN} {TAB} {ALTUP}")
-	Beep(250, 400)
-	Sleep(Random(1411,1744,1))
+EndFunc
 
-	AcceptInvite()
 
-	$lastBuffTime = TimerDiff($BuffTimer)
+Func startALTTABProc()
+	Sleep(Random(211,744,1))
+
+	Beep(400, 400)
+	Send("{ALTDOWN}")
+	Sleep(Random(211,344,1))
+	Send("{TAB}")
+	Sleep(Random(211,344,1))
+	Send("{TAB}")
+	Sleep(Random(211,344,1))
+	Send("{TAB}")
+	Sleep(Random(211,344,1))
+	Send("{ALTUP}")
+
+	 Sleep(Random(2211,2744,1))
+
+	 Beep(400, 400)
+	Send("{ALTDOWN}")
+	Sleep(Random(211,344,1))
+	Send("{TAB}")
+	Sleep(Random(211,344,1))
+	Send("{TAB}")
+	Sleep(Random(211,344,1))
+	Send("{TAB}")
+	Sleep(Random(211,344,1))
+	Send("{ALTUP}")
+
+	 Sleep(Random(2211,2744,1))
+
+	 Beep(400, 400)
+	Send("{ALTDOWN}")
+	Sleep(Random(211,344,1))
+	Send("{TAB}")
+	Sleep(Random(211,344,1))
+	Send("{TAB}")
+	Sleep(Random(211,344,1))
+	Send("{ALTUP}")
+	Sleep(Random(211,344,1))
+
+	$spolier = 1
+	$warc = 1
+	$healer = 2
+
+EndFunc
+
+Func ALTTAB($q)
+
+	Sleep(Random(251,444,1))
+	Send("{ALTDOWN}")
+
+	While $q > 0
+
+		Sleep(Random(151,314,1))
+		Send("{TAB}")
+
+		$q -= 1
+
+	WEnd
+
+	Sleep(Random(311,444,1))
+	Send("{ALTUP}")
+	Sleep(Random(511,644,1))
+
+EndFunc
+
+Func InviteWarc()
+
+	Sleep(Random(211,344,1))
+
+	;press F6 on second panels to Invite Warc
+	MouseClick("left", 590, (940 - $toSmallY), 2, 200)
+	Sleep(Random(411,644,1))
+
 	MischiefManaged()
 
 EndFunc
 
 Func AcceptInvite()
 
-	local $index = 0
-
 	While True
 
 		If	IsDialogBoxAppear() then
 
 			;press OK on dialog window btn
-			MouseClick("left", 466, (1020 - $toSmallY), 1, 200)
-			Sleep(Random(1000, 2000, 1))
+			MouseClick("left", 466, (1020 - $toSmallY), 2, 200)
+			Sleep(Random(200, 400, 1))
 
 			ExitLoop
 		EndIf
@@ -997,32 +1209,57 @@ Func AcceptInvite()
 		MischiefManaged()
 	WEnd
 
-	Buff()
-	LeaveParrty()
-
-	Send("{ALTDOWN} {TAB} {ALTUP}")
-	Beep(250, 400)
-	Sleep(Random(1411,1744,1))
+	BuffOrHeal()
 
 EndFunc
 
-Func Buff()
+Func BuffOrHeal()
 
-	;press F7 on second panels
-   MouseClick("left", 625, (940 - $toSmallY), 2, 200)
-   Sleep(Random(1011,1044,1))
+	If	$lastWCHealTime > 14000 And IsMyHPDamagedOver45() Then
+
+		$healWCTimer = TimerInit()
+		$safePDTimer = TimerInit()
+
+		;F9
+		Heal()
+
+	EndIf
+
+	$lastWCHealTime = TimerDiff($healWCTimer)
+
+	If	$lastBuffTime > 1100000 Then
+
+		$BuffTimer = TimerInit()
+		$safePDTimer = TimerInit()
+
+		;press F7 on second panels
+		MouseClick("left", 625, (940 - $toSmallY), 2, 200)
+		Sleep(Random(211,344,1))
+
+	EndIf
+
+	Sleep(Random(211,344,1))
+	$lastBuffTime = TimerDiff($BuffTimer)
 
 EndFunc
 
-Func LeaveParrty()
+Func DismissWCFromParty()
 
-	;press leave party on F12 third panels
-	MouseClick("left", 822, (890 - $toSmallY), 2, 200)
-	Sleep(Random(211,444,1))
+
+	Sleep(Random(531,744,1))
+
+	If	IsMyHPDamagedOver60() and $safePartyDismiss > 120000 Then
+
+		;press leave party on F12 third panels
+		MouseClick("left", 822, (890 - $toSmallY), 2, 200)
+		Sleep(Random(211,344,1))
+
+	EndIf
+
+	$safePartyDismiss = TimerDiff($safePDTimer)
+	MischiefManaged()
 
 EndFunc
-
-
 
 
 Func exec()
@@ -1060,15 +1297,25 @@ EndFunc
 
 ;altabaet v okno L2
 WinActivate("Lineage")
+
 ;ojidatet paru sek poka progruzit
 Sleep(Random(1911,2544,1))
 
 StartSound()
 Sleep(Random(111,344,1))
 startALTTABProc()
-InviteWarc()
 
-;exec()
+While True
+
+HealAndBuffUsWarcIfYouCan()
+
+
+	Sleep(1000)
+	Beep(960, 100)
+	MischiefManaged()
+	WEnd
+
+exec()
 Beep(700, 40)
 
 ;SuccessSound()
