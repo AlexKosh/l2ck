@@ -9,8 +9,11 @@
 
 SRandom(@MSEC)
 global const $LogFile = "debugtest.log"
+;small = 265 / large = 1
+global const $toSmallY = 265
+;small = 275 / large 1
+global const $toSmallX = 275
 
-global const $toSmall = 0
 global $targetDetected = False
 global $pmOneThreatened = False
 global $pmOneIsSafe = True
@@ -23,6 +26,14 @@ global $healTimer = 0
 
 global $lastAlacrityTime = 1140001
 global $AlacrityTimer = 0
+
+global $stunChance = 0
+
+global $firstSWChanged = False
+global $secondSWChanged = False
+
+global $lastBuffTime = 1140001
+global $BuffTimer = 0
 
 
 
@@ -45,12 +56,30 @@ func LogWrite($data)
     FileWrite($LogFile, $data & chr(10))
 endfunc
 
+Func InviteWarc()
+
+	;every 19 minutes uses alacrity potion on second panel F7
+	If	$lastBuffTime > 1100000 Then
+
+		$BuffTimer = TimerInit()
+
+		MouseClick("left", 590, (940 - $toSmallY), 2, 200)
+		Sleep(Random(111,344,1))
+
+	EndIf
+
+	$lastBuffTime = TimerDiff($BuffTimer)
+	MischiefManaged()
+
+EndFunc
+
+
 ;proveriaet nalichie pixela krasnogo zveta kak hp v oblasti gde target
 ;true if >1hp na target, false if targeta net ili u targeta net hp ili hp polosi
 Func IsTargetExist()
     const $SizeSearch = 80
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
+    const $MinNbPixel = 2
+    const $OptNbPixel = 7
     const $PosX = 420
     const $PosY = 59
 
@@ -144,6 +173,39 @@ Func IsPMOneAttacked()
     endif
 endfunc
 
+Func IsPMTwoAttacked()
+    const $SizeSearch = 40
+    const $MinNbPixel = 3
+    const $OptNbPixel = 10
+    const $PosX = 155
+    const $PosY = 300
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x5E2936, 10)
+
+    const $MaxX = 300
+    const $MinX = 15
+    const $MaxY = 360
+	const $MinY = 320
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+endfunc
+
 Func IsMyHPDamaged()
 
     const $SizeSearch = 80
@@ -155,8 +217,8 @@ Func IsMyHPDamaged()
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
                          0x421010, 10)
 
-    const $MaxX = 130
-    const $MinX = 100
+    const $MaxX = 160
+    const $MinX = 10
     const $MaxY = 100
 
     if not @error then
@@ -177,20 +239,214 @@ Func IsMyHPDamaged()
     endif
 endfunc
 
+Func IsMyHPDamagedOver60()
+
+    const $SizeSearch = 80
+    const $MinNbPixel = 3
+    const $OptNbPixel = 10
+    const $PosX = 50
+    const $PosY = 75
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x421010, 10)
+
+    const $MaxX = 105
+    const $MinX = 5
+    const $MaxY = 100
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+endfunc
+
+Func IsMyMPUpper30()
+
+    const $SizeSearch = 80
+    const $MinNbPixel = 3
+    const $OptNbPixel = 10
+    const $PosX = 120
+    const $PosY = 70
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x005DB8, 10)
+
+    const $MaxX = 160
+    const $MinX = 75
+    const $MaxY = 100
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+endfunc
+
+Func IsShadowWeaponReadyOne()
+    const $SizeSearch = 40
+    const $MinNbPixel = 2
+    const $OptNbPixel = 5
+    const $PosX = 400
+    const $PosY = (900 - $toSmallY)
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x949A73, 10)
+
+    const $MaxX = 415
+    const $MinX = 385
+    const $MaxY = (905 - $toSmallY)
+	const $MinY = (875 - $toSmallY)
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY and $MinY < $coords[1] then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+ endfunc
+
+Func IsShadowWeaponReadyTwo()
+    const $SizeSearch = 40
+    const $MinNbPixel = 2
+    const $OptNbPixel = 5
+    const $PosX = 435
+    const $PosY = (900 - $toSmallY)
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x949A73, 10)
+
+    const $MaxX = 451
+    const $MinX = 420
+    const $MaxY = (905 - $toSmallY)
+	const $MinY = (875 - $toSmallY)
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY and $MinY < $coords[1] then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+endfunc
+
+Func ChangeShadowWeapon()
+
+	If IsShadowWeaponReadyOne() = False Then
+
+	If IsShadowWeaponReadyTwo() = False And $secondSWChanged = False Then
+
+		Beep(500, 400)
+		Beep(600, 400)
+		Beep(400, 400)
+
+		MouseClick("left", (960 - $toSmallX), (635 - $toSmallY), 1, 200)
+		Sleep(Random(911,1444,1))
+
+
+		MouseClick("left", 475, (890 - $toSmallY), 1, 200)
+		Sleep(Random(211,444,1))
+		$secondSWChanged = True
+
+		Return
+	EndIf
+
+	Sleep(Random(211,444,1))
+
+	If $firstSWChanged = False Then
+		Beep(400, 400)
+		Beep(500, 400)
+		Beep(600, 400)
+
+		MouseClick("left", (960 - $toSmallX), (635 - $toSmallY), 1, 200)
+		Sleep(Random(911,1444,1))
+
+		MouseClick("left", 435, (890 - $toSmallY), 1, 200)
+		$firstSWChanged = True
+		Sleep(Random(211,444,1))
+	EndIf
+
+	EndIf
+
+EndFunc
+
+
+Func CalculateStunChance()
+
+	$stunChance = 0
+	;1 k 30 chance
+	If IsMyMPUpper30() Then
+
+		$stunChance = 70
+
+	EndIf
+	;1 k 3
+	If IsMyHPDamagedOver60() Then
+
+		$stunChance = 98
+
+	EndIf
+
+EndFunc
+
 Func Attack()
 
    MischiefManaged()
 	;MouseClick("left", 392, 995, 2, 200)
 	;Sleep(Random(291,544,1))
-	MouseClick("left", 434, (995 - $toSmall), 2, 300)
+	MouseClick("left", 434, (995 - $toSmallY), 2, 300)
 	Sleep(Random(211, 394,1))
 
 	;usaet alacrity pot every 19 min
-	NeedSomeAlacrity()
+	;NeedSomeAlacrity()
+	ChangeShadowWeapon()
 
 	While IsTargetExist()
 
 		MischiefManaged()
+		HealMeIfYouCan()
+		ChangeShadowWeapon()
 
 		;esli u PMOne HP ne max to proveriaem target s nego
 		If IsPMOneAttacked() Then
@@ -199,51 +455,64 @@ Func Attack()
 			TakeAssistFromPMOne()
 			If IsTargetExist() Then
 				$targetDetected = True
-				MouseClick("left", 392, 995, 2, 200)
+				MouseClick("left", 392, (995 - $toSmallY), 2, 200)
+			EndIf
+		EndIf
+
+		;esli u PMTwo HP ne max to proveriaem target s nego
+		If IsPMTwoAttacked() Then
+
+			;proveriaem ne sagrilsia li mob na party member one
+			TakeAssistFromPMTwo()
+			If IsTargetExist() Then
+				$targetDetected = True
+				MouseClick("left", 392, (995 - $toSmallY), 2, 200)
 			EndIf
 		EndIf
 
 		HealMeIfYouCan()
 
+		CalculateStunChance()
 		;stun F5
-		If Random(1, 20) > 16 Then
-			MouseClick("left", 392, (995 - $toSmall), 2, 300)
-			Sleep(Random(250,495,1))
-			ContinueLoop;
+		If Random($stunChance, 100) > 99 Then
+			MouseClick("left", 555, (995 - $toSmallY), 2, 300)
+			Sleep(Random(550,995,1))
+			ContinueLoop
 		EndIf
 
 		;spoil F2
-		If Random(1, 20) > 18 Then
-			MouseClick("left", 434, (995 - $toSmall), 2, 300)
-			Sleep(Random(250,595,1))
+		If Random(1, 100) > 94 Then
+			MouseClick("left", 434, (995 - $toSmallY), 2, 300)
+			Sleep(Random(550,995,1))
 			ContinueLoop;
 		Else
 			;attack F1
-			MouseClick("left", 392, (995 - $toSmall), 2, 300)
-			Sleep(Random(250,595,1))
+			MouseClick("left", 392, (995 - $toSmallY), 2, 300)
+			Sleep(Random(750,1295,1))
 			ContinueLoop;
 		EndIf
 
-		Sleep(Random(250,695,1))
+		Sleep(Random(250,495,1))
 
 	WEnd
 
+	Sweep()
 
 EndFunc
 
 Func ClearTarget()
 
-	MouseClick("left", 536, 44, 2, 200)
+	MouseClick("left", 562, 44, 2, 200)
 
 EndFunc
-
+;legacy
 Func MoveForward()
 	;move right for catacombs
 	MouseClick("left", 1150, 450, 1, 200)
 	Sleep(Random(111,344,1))
 
 EndFunc
-
+;legacy
 Func NeedSomeAlacrity()
 
 	;every 19 minutes uses alacrity potion on second panel F7
@@ -251,7 +520,7 @@ Func NeedSomeAlacrity()
 
 		$AlacrityTimer = TimerInit()
 
-		MouseClick("left", 625, (940 - $toSmall), 2, 200)
+		MouseClick("left", 625, (940 - $toSmallY), 2, 200)
 		Sleep(Random(111,244,1))
 
 	EndIf
@@ -264,30 +533,37 @@ EndFunc
 
 Func MakeCameraVerticalAgain()
 
-	MouseClickDrag ( "right", 950, 420, 950, 550, 200)
-	;small
-	;MouseClickDrag ( "right", 680, 300, 680, 430, 200)
+	If $toSmallY = 1 or $toSmallX = 1 Then
+		;large
+		MouseClickDrag ( "right", 950, 420, 950, 550, 200)
+
+	Else
+		;small
+		MouseClickDrag ( "right", 680, 300, 680, 430, 200)
+
+	EndIf
+
 	Sleep(Random(111,344,1))
 
 EndFunc
 
 Func MoveLeftUp()
 
-	MouseClick("left", (500), 250, 1, 200)
+	MouseClick("left", (500 - $toSmallX), (250 - ($toSmallY /2)), 1, 200)
 	Sleep(Random(111,344,1))
 
 EndFunc
 
 Func MoveRightUp()
 
-	MouseClick("left", (1550), 250, 1, 200)
+	MouseClick("left", (1550 - ($toSmallX *2)), (250 - ($toSmallY /2)), 1, 200)
 	Sleep(Random(111,344,1))
 
 EndFunc
 
 Func MoveRightDown()
 
-	MouseClick("left", (1550) , (840), 1, 200)
+	MouseClick("left", (1550 - ($toSmallX *2)) , (840 - $toSmallY), 1, 200)
 	Sleep(Random(111,344,1))
 
 EndFunc
@@ -295,7 +571,7 @@ EndFunc
 Func MoveLeftDown()
 
 	;MouseClick("left", 500, 840, 1, 200)
-	MouseClick("left", (500), (840), 1, 200)
+	MouseClick("left", (500 - $toSmallX), (840 - $toSmallY), 1, 200)
 	Sleep(Random(111,344,1))
 
 EndFunc
@@ -310,7 +586,7 @@ EndFunc
 Func TargetNext()
 
    MischiefManaged()
-	MouseClick("left", 707, (995 - $toSmall), 2, 300)
+	MouseClick("left", 707, (995 - $toSmallY), 2, 300)
 	Sleep(Random(211,344,1))
 
 EndFunc
@@ -318,14 +594,14 @@ EndFunc
 Func PickUp()
 
    MischiefManaged()
-	MouseClick("left", 620, (995 - $toSmall), 2, 300)
+	MouseClick("left", 620, (995 - $toSmallY), 2, 300)
 	Sleep(Random(111,294,1))
 
 EndFunc
 
 Func Sweep()
 
-	MouseClick("left", 470, (995 - $toSmall), 2, 200)
+	MouseClick("left", 470, (995 - $toSmallY), 2, 200)
 	Sleep(Random(111,244,1))
 
 EndFunc
@@ -335,12 +611,12 @@ local $moveCount = 0;
 Func MoveToPartymemberOne()
 
    MischiefManaged()
-	MouseClick("left", 550, (940 - $toSmall), 2, 200)
+	MouseClick("left", 550, (940 - $toSmallY), 2, 200)
 	Sleep(Random(111,344,1))
 
 
 EndFunc
-
+;legacy
 Func MoveToPartymemberTwo()
 
 	MouseClick("left", 585, 940, 2, 200)
@@ -379,6 +655,8 @@ EndFunc
 
 Func SelectTarget()
 
+	HealMeIfYouCan()
+	ChangeShadowWeapon()
 	Sleep(Random(90,120,1))
 	;tut idet proverka ne napal li agro-mob i ne vzialsia li target avtomatom
 	If IsTargetExist() Then
@@ -394,6 +672,18 @@ Func SelectTarget()
 
 		;proveriaem ne sagrilsia li mob na party member one
 		TakeAssistFromPMOne()
+		If IsTargetExist() Then
+			$targetDetected = True
+			Attack()
+			Return
+		EndIf
+	EndIf
+
+	;esli u PMTwo HP ne max to proveriaem target s nego
+	If IsPMTwoAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMTwo()
 		If IsTargetExist() Then
 			$targetDetected = True
 			Attack()
@@ -417,9 +707,11 @@ Func SelectTarget()
 		Return
 	EndIf
 
-	;dvigaemsiav centr k warc i berem targetNext() ========================
 	MakeCameraVerticalAgain()
-	Sleep(Random(191,222,1))
+
+	;dvigaemsiav centr k warc i berem targetNext() ========================
+	;MakeCameraVerticalAgain()
+	;Sleep(Random(191,222,1))
 	MoveToPartymemberOne()
 	Sleep(Random(1111,1544,1))
 
@@ -445,6 +737,18 @@ Func SelectTarget()
 			EndIf
 		EndIf
 
+		;esli u PMTwo HP ne max to proveriaem target s nego
+	If IsPMTwoAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMTwo()
+		If IsTargetExist() Then
+			$targetDetected = True
+			Attack()
+			Return
+		EndIf
+	EndIf
+
 		;tut idet proverka ne napal li agro-mob i ne vzialsia li target avtomatom
 		If IsTargetExist() Then
 			$targetDetected = True
@@ -467,8 +771,7 @@ Func SelectTarget()
 	WEnd
 
 	;dvigaemsiav centr k warc i berem targetNext() ========================
-	MakeCameraVerticalAgain()
-	Sleep(Random(191,222,1))
+	;Sleep(Random(191,222,1))
 	MoveToPartymemberOne()
 	Sleep(Random(1111,1544,1))
 
@@ -493,6 +796,18 @@ Func SelectTarget()
 			EndIf
 		EndIf
 
+		;esli u PMTwo HP ne max to proveriaem target s nego
+	If IsPMTwoAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMTwo()
+		If IsTargetExist() Then
+			$targetDetected = True
+			Attack()
+			Return
+		EndIf
+	EndIf
+
 		;tut idet proverka ne napal li agro-mob i ne vzialsia li target avtomatom
 		If IsTargetExist() Then
 			$targetDetected = True
@@ -515,8 +830,8 @@ Func SelectTarget()
 	WEnd
 
 	;dvigaemsiav centr k warc i berem targetNext() ========================
-	MakeCameraVerticalAgain()
-	Sleep(Random(191,222,1))
+	;MakeCameraVerticalAgain()
+	;Sleep(Random(191,222,1))
 	MoveToPartymemberOne()
 	Sleep(Random(1111,1544,1))
 
@@ -541,6 +856,18 @@ Func SelectTarget()
 			EndIf
 		EndIf
 
+		;esli u PMTwo HP ne max to proveriaem target s nego
+	If IsPMTwoAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMTwo()
+		If IsTargetExist() Then
+			$targetDetected = True
+			Attack()
+			Return
+		EndIf
+	EndIf
+
 		;tut idet proverka ne napal li agro-mob i ne vzialsia li target avtomatom
 		If IsTargetExist() Then
 			$targetDetected = True
@@ -563,8 +890,8 @@ Func SelectTarget()
 	WEnd
 
 	;dvigaemsiav centr k warc i berem targetNext() ========================
-	MakeCameraVerticalAgain()
-	Sleep(Random(191,222,1))
+	;MakeCameraVerticalAgain()
+	;Sleep(Random(191,222,1))
 	MoveToPartymemberOne()
 	Sleep(Random(1111,1544,1))
 
@@ -588,6 +915,18 @@ Func SelectTarget()
 				Return
 			EndIf
 		EndIf
+
+		;esli u PMTwo HP ne max to proveriaem target s nego
+	If IsPMTwoAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMTwo()
+		If IsTargetExist() Then
+			$targetDetected = True
+			Attack()
+			Return
+		EndIf
+	EndIf
 
 		;tut idet proverka ne napal li agro-mob i ne vzialsia li target avtomatom
 		If IsTargetExist() Then
@@ -627,11 +966,11 @@ EndFunc
 
 Func HealMeIfYouCan()
 
-	If	IsMyHPDamaged() and $lastHealTime > 10000 Then
+	If	IsMyHPDamagedOver60() and $lastHealTime > 10000 Then
 
 		$healTimer = TimerInit()
 
-		MouseClick("left", 510, (995 - $toSmall), 2, 200)
+		MouseClick("left", 510, (995 - $toSmallY), 2, 200)
 		Sleep(Random(111,244,1))
 
 	EndIf
@@ -710,9 +1049,8 @@ Sleep(Random(1211,1944,1))
 StartSound()
 Sleep(Random(111,344,1))
 
-;MakeCameraVerticalAgain()
-exec()
-
+InviteWarc()
+;exec()
 Beep(700, 40)
 
 ;SuccessSound()
