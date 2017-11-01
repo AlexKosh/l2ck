@@ -247,6 +247,39 @@ Func IsPMOneHPBelow60()
     endif
 endfunc
 
+Func IsDialogBoxAppear()
+    const $SizeSearch = 40
+    const $MinNbPixel = 3
+    const $OptNbPixel = 10
+    const $PosX = 466
+    const $PosY = 750
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0xE6D9BE, 10)
+
+    const $MaxX = 470
+    const $MinX = 450
+    const $MaxY = 760
+	const $MinY = 740
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+ endfunc
+
 ;proveriaet nalichie pixela krasnogo zveta kak hp v oblasti gde target
 ;true if >1hp na targete, false if targeta net ili u targeta net hp ili hp polosi
 Func IsTargetExist()
@@ -426,8 +459,24 @@ Sleep(Random(2211,2944,1))
 StartSound()
 Sleep(Random(111,344,1))
 
-startALTTABProc()
+;startALTTABProc()
+While True
+If IsDialogBoxAppear() Then
+   Beep(400, 200)
+   Beep(500, 100)
 
-exec()
+   MouseClick("left", 466, 750, 150)
+   Sleep(Random(111,344,1))
+
+   MouseClick("left", 625, (940 - $toSmall), 2, 200)
+   Sleep(Random(18000, 20000, 1))
+   MouseClick("left", 822, (626 - $toSmall), 2, 200)
+   Sleep(Random(111,344,1))
+EndIf
+Sleep(300)
+MischiefManaged()
+WEnd
+
+;exec()
 
 StartSound()
