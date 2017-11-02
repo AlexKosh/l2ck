@@ -45,11 +45,13 @@ global $warc = 0
 ;start: 2, fight:1
 global $healer = 0
 
-global $safePartyDismiss = 120000
+global $safePartyDismiss = 0
 global $safePDTimer = 0
 
 global $lastWCHealTime = 30001
 global $healWCTimer = 0
+
+global $warcInParty = False
 
 
 Func ErrorSound()
@@ -569,13 +571,16 @@ Func Attack()
 
 	;usaet alacrity pot every 19 min
 	;NeedSomeAlacrity()
-	ChangeShadowWeapon()
+	;ChangeShadowWeapon()
 
 	While IsTargetExist()
 
 		MischiefManaged()
 		HealMeIfYouCan()
-		ChangeShadowWeapon()
+		HealMeEEIfYouCan()
+		HealAndBuffUsWarcIfYouCan()
+		DismissWCFromParty()
+		;ChangeShadowWeapon()
 
 		;esli u PMOne HP ne max to proveriaem target s nego
 		If IsPMOneAttacked() Then
@@ -732,7 +737,10 @@ EndFunc
 Func SelectTarget()
 
 	HealMeIfYouCan()
-	ChangeShadowWeapon()
+	HealMeEEIfYouCan()
+	HealAndBuffUsWarcIfYouCan()
+	DismissWCFromParty()
+	;ChangeShadowWeapon()
 	Sleep(Random(90,120,1))
 	;tut idet proverka ne napal li agro-mob i ne vzialsia li target avtomatom
 	If IsTargetExist() Then
@@ -1184,9 +1192,13 @@ Func InviteWarc()
 
 	Sleep(Random(211,344,1))
 
-	;press F6 on second panels to Invite Warc
-	MouseClick("left", 590, (940 - $toSmallY), 2, 200)
-	Sleep(Random(411,644,1))
+	If	$warcInParty = False Then
+
+		;press F6 on second panels to Invite Warc
+		MouseClick("left", 590, (940 - $toSmallY), 2, 200)
+		Sleep(Random(411,644,1))
+
+	EndIf
 
 	MischiefManaged()
 
@@ -1194,13 +1206,14 @@ EndFunc
 
 Func AcceptInvite()
 
-	While True
+	While $warcInParty = False
 
 		If	IsDialogBoxAppear() then
 
 			;press OK on dialog window btn
 			MouseClick("left", 466, (1020 - $toSmallY), 2, 200)
 			Sleep(Random(200, 400, 1))
+			$warcInParty = True
 
 			ExitLoop
 		EndIf
@@ -1248,10 +1261,11 @@ Func DismissWCFromParty()
 
 	Sleep(Random(531,744,1))
 
-	If	IsMyHPDamagedOver60() and $safePartyDismiss > 120000 Then
+	If $safePartyDismiss > 120000 And $warcInParty = True Then
 
 		;press leave party on F12 third panels
 		MouseClick("left", 822, (890 - $toSmallY), 2, 200)
+		$warcInParty = False
 		Sleep(Random(211,344,1))
 
 	EndIf
@@ -1304,16 +1318,6 @@ Sleep(Random(1911,2544,1))
 StartSound()
 Sleep(Random(111,344,1))
 startALTTABProc()
-
-While True
-
-HealAndBuffUsWarcIfYouCan()
-
-
-	Sleep(1000)
-	Beep(960, 100)
-	MischiefManaged()
-	WEnd
 
 exec()
 Beep(700, 40)
