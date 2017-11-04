@@ -963,6 +963,30 @@ Func SelectTarget()
 		EndIf
 	EndIf
 
+		;esli u PMTwo HP ne max to proveriaem target s nego
+	If IsPMThreeAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMThree()
+		If IsTargetExist() Then
+			$targetDetected = True
+			Attack()
+			Return
+		EndIf
+	EndIf
+
+	;esli u PMTwo HP ne max to proveriaem target s nego
+	If IsPMFourAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMFour()
+		If IsTargetExist() Then
+			$targetDetected = True
+			Attack()
+			Return
+		EndIf
+	EndIf
+
 		;tut idet proverka ne napal li agro-mob i ne vzialsia li target avtomatom
 		If IsTargetExist() Then
 			$targetDetected = True
@@ -1014,6 +1038,30 @@ Func SelectTarget()
 
 		;proveriaem ne sagrilsia li mob na party member one
 		TakeAssistFromPMTwo()
+		If IsTargetExist() Then
+			$targetDetected = True
+			Attack()
+			Return
+		EndIf
+	EndIf
+
+	;esli u PMTwo HP ne max to proveriaem target s nego
+	If IsPMThreeAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMThree()
+		If IsTargetExist() Then
+			$targetDetected = True
+			Attack()
+			Return
+		EndIf
+	EndIf
+
+	;esli u PMTwo HP ne max to proveriaem target s nego
+	If IsPMFourAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMFour()
 		If IsTargetExist() Then
 			$targetDetected = True
 			Attack()
@@ -1079,6 +1127,30 @@ Func SelectTarget()
 		EndIf
 	EndIf
 
+	;esli u PMTwo HP ne max to proveriaem target s nego
+	If IsPMThreeAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMThree()
+		If IsTargetExist() Then
+			$targetDetected = True
+			Attack()
+			Return
+		EndIf
+	EndIf
+
+	;esli u PMTwo HP ne max to proveriaem target s nego
+	If IsPMFourAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMFour()
+		If IsTargetExist() Then
+			$targetDetected = True
+			Attack()
+			Return
+		EndIf
+	EndIf
+
 		;tut idet proverka ne napal li agro-mob i ne vzialsia li target avtomatom
 		If IsTargetExist() Then
 			$targetDetected = True
@@ -1130,6 +1202,30 @@ Func SelectTarget()
 
 		;proveriaem ne sagrilsia li mob na party member one
 		TakeAssistFromPMTwo()
+		If IsTargetExist() Then
+			$targetDetected = True
+			Attack()
+			Return
+		EndIf
+	EndIf
+
+	;esli u PMTwo HP ne max to proveriaem target s nego
+	If IsPMThreeAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMThree()
+		If IsTargetExist() Then
+			$targetDetected = True
+			Attack()
+			Return
+		EndIf
+	EndIf
+
+	;esli u PMTwo HP ne max to proveriaem target s nego
+	If IsPMFourAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMFour()
 		If IsTargetExist() Then
 			$targetDetected = True
 			Attack()
