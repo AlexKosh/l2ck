@@ -205,6 +205,72 @@ Func IsPMTwoAttacked()
     endif
 endfunc
 
+Func IsPMThreeAttacked()
+    const $SizeSearch = 40
+    const $MinNbPixel = 3
+    const $OptNbPixel = 10
+    const $PosX = 155
+    const $PosY = 300
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x5E2936, 10)
+
+    const $MaxX = 300
+    const $MinX = 15
+    const $MaxY = 410
+	const $MinY = 370
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+endfunc
+
+Func IsPMFourAttacked()
+    const $SizeSearch = 40
+    const $MinNbPixel = 3
+    const $OptNbPixel = 10
+    const $PosX = 155
+    const $PosY = 300
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x5E2936, 10)
+
+    const $MaxX = 300
+    const $MinX = 15
+    const $MaxY = 450
+	const $MinY = 410
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+endfunc
+
 Func IsMyHPDamaged()
 
     const $SizeSearch = 80
@@ -578,7 +644,31 @@ Func Attack()
 		HealAndBuffUsWarcIfYouCan()
 		;ChangeShadowWeapon()
 
-		;esli u PMOne HP ne max to proveriaem target s nego
+		;esli u PMThree HP ne max to proveriaem target s nego
+	If IsPMThreeAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMThree()
+		If IsTargetExist() Then
+			$targetDetected = True
+			Attack()
+			Return
+		EndIf
+	EndIf
+
+	;esli u PMFour HP ne max to proveriaem target s nego
+	If IsPMFourAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMFour()
+		If IsTargetExist() Then
+			$targetDetected = True
+			Attack()
+			Return
+		EndIf
+	EndIf
+
+	;esli u PMOne HP ne max to proveriaem target s nego
 		If IsPMOneAttacked() Then
 
 			;proveriaem ne sagrilsia li mob na party member one
@@ -589,7 +679,7 @@ Func Attack()
 			EndIf
 		EndIf
 
-		;esli u PMTwo HP ne max to proveriaem target s nego
+	;esli u PMTwo HP ne max to proveriaem target s nego
 		If IsPMTwoAttacked() Then
 
 			;proveriaem ne sagrilsia li mob na party member one
@@ -730,6 +820,20 @@ Func TakeAssistFromPMTwo()
 
 EndFunc
 
+Func TakeAssistFromPMThree()
+
+	MouseClick("right", 85, 390, 2, 300)
+	Sleep(Random(211,344,1))
+
+EndFunc
+
+Func TakeAssistFromPMFour()
+
+	MouseClick("right", 85, 430, 2, 300)
+	Sleep(Random(211,344,1))
+
+EndFunc
+
 Func SelectTarget()
 
 	HealMeIfYouCan()
@@ -763,6 +867,30 @@ Func SelectTarget()
 
 		;proveriaem ne sagrilsia li mob na party member one
 		TakeAssistFromPMTwo()
+		If IsTargetExist() Then
+			$targetDetected = True
+			Attack()
+			Return
+		EndIf
+	EndIf
+
+	;esli u PMTwo HP ne max to proveriaem target s nego
+	If IsPMThreeAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMThree()
+		If IsTargetExist() Then
+			$targetDetected = True
+			Attack()
+			Return
+		EndIf
+	EndIf
+
+	;esli u PMTwo HP ne max to proveriaem target s nego
+	If IsPMFourAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMFour()
 		If IsTargetExist() Then
 			$targetDetected = True
 			Attack()
@@ -1070,7 +1198,7 @@ EndFunc
 
 Func HealAndBuffUsWarcIfYouCan()
 
-	If	IsMyHPDamagedOver80() or IsPMOneOrTwoHPBelow90() Or $lastBuffTime > 1080000 Then
+	If	($lastWCHealTime > 14000 And (IsMyHPDamagedOver80() or IsPMOneOrTwoHPBelow90())) Or $lastBuffTime > 1080000 Then
 
 		ALTTAB(1)
 
@@ -1081,6 +1209,7 @@ Func HealAndBuffUsWarcIfYouCan()
 	EndIf
 
 	$lastBuffTime = TimerDiff($BuffTimer)
+	$lastWCHealTime = TimerDiff($healWCTimer)
 
 EndFunc
 
