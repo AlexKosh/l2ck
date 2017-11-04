@@ -115,7 +115,7 @@ Func IsAltTab()
     const $PosY = 400
 
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0xFFC90E, 10)
+                         0xED1C24, 10)
 
     const $MaxX = 790
     const $MinX = 510
@@ -149,7 +149,7 @@ Func IsPMOneAttacked()
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
                          0x5E2936, 10)
 
-    const $MaxX = 300
+    const $MaxX = 330
     const $MinX = 15
     const $MaxY = 320
 	const $MinY = 260
@@ -182,7 +182,7 @@ Func IsPMTwoAttacked()
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
                          0x5E2936, 10)
 
-    const $MaxX = 300
+    const $MaxX = 330
     const $MinX = 15
     const $MaxY = 360
 	const $MinY = 320
@@ -215,7 +215,7 @@ Func IsPMThreeAttacked()
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
                          0x5E2936, 10)
 
-    const $MaxX = 300
+    const $MaxX = 330
     const $MinX = 15
     const $MaxY = 410
 	const $MinY = 370
@@ -248,7 +248,7 @@ Func IsPMFourAttacked()
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
                          0x5E2936, 10)
 
-    const $MaxX = 300
+    const $MaxX = 330
     const $MinX = 15
     const $MaxY = 450
 	const $MinY = 410
@@ -415,7 +415,7 @@ Func IsPMOneOrTwoHPBelow90()
 
     const $MaxX = 150
     const $MinX = 15
-    const $MaxY = 360
+    const $MaxY = 450
 	const $MinY = 280
 
     if not @error then
@@ -629,68 +629,73 @@ EndFunc
 
 Func Attack()
 
-   MischiefManaged()
-	MouseClick("left", 434, (995 - $toSmallY), 2, 300)
-	Sleep(Random(211, 394,1))
+   ;F2
+   MouseClick("left", 434, (995 - $toSmallY), 2, 300)
+   Sleep(Random(211, 394,1))
 
-	;usaet alacrity pot every 19 min
-	;NeedSomeAlacrity()
-	;ChangeShadowWeapon()
 
 	While IsTargetExist()
 
 		MischiefManaged()
 		HealMeIfYouCan()
-		HealAndBuffUsWarcIfYouCan()
 		;ChangeShadowWeapon()
 
 		;esli u PMThree HP ne max to proveriaem target s nego
-	If IsPMThreeAttacked() Then
+		If IsPMThreeAttacked() Then
 
-		;proveriaem ne sagrilsia li mob na party member one
-		TakeAssistFromPMThree()
-		If IsTargetExist() Then
-			$targetDetected = True
-			Attack()
-			Return
+			;proveriaem ne sagrilsia li mob na party member one
+			TakeAssistFromPMThree()
+			If IsTargetExist() Then
+				$targetDetected = True
+				MouseClick("left", 434, (995 - $toSmallY), 2, 150)
+				HealAndBuffUsWarcIfYouCan()
+				Sleep(Random(550,995,1))
+				ContinueLoop
+			EndIf
 		EndIf
-	EndIf
 
-	;esli u PMFour HP ne max to proveriaem target s nego
-	If IsPMFourAttacked() Then
+		;esli u PMFour HP ne max to proveriaem target s nego
+		If IsPMFourAttacked() Then
 
-		;proveriaem ne sagrilsia li mob na party member one
-		TakeAssistFromPMFour()
-		If IsTargetExist() Then
-			$targetDetected = True
-			Attack()
-			Return
+			;proveriaem ne sagrilsia li mob na party member one
+			TakeAssistFromPMFour()
+			If IsTargetExist() Then
+				$targetDetected = True
+				MouseClick("left", 434, (995 - $toSmallY), 2, 150)
+				HealAndBuffUsWarcIfYouCan()
+				Sleep(Random(550,995,1))
+				ContinueLoop
+			EndIf
 		EndIf
-	EndIf
 
-	;esli u PMOne HP ne max to proveriaem target s nego
+		;esli u PMOne HP ne max to proveriaem target s nego
 		If IsPMOneAttacked() Then
 
 			;proveriaem ne sagrilsia li mob na party member one
 			TakeAssistFromPMOne()
 			If IsTargetExist() Then
 				$targetDetected = True
-				MouseClick("left", 392, (995 - $toSmallY), 2, 200)
+				MouseClick("left", 392, (995 - $toSmallY), 2, 150)
+				HealAndBuffUsWarcIfYouCan()
+				Sleep(Random(550,995,1))
+				ContinueLoop
 			EndIf
 		EndIf
 
-	;esli u PMTwo HP ne max to proveriaem target s nego
+		;esli u PMTwo HP ne max to proveriaem target s nego
 		If IsPMTwoAttacked() Then
 
 			;proveriaem ne sagrilsia li mob na party member one
 			TakeAssistFromPMTwo()
 			If IsTargetExist() Then
 				$targetDetected = True
-				MouseClick("left", 392, (995 - $toSmallY), 2, 200)
+				MouseClick("left", 392, (995 - $toSmallY), 2, 150)
+				HealAndBuffUsWarcIfYouCan()
+				Sleep(Random(550,995,1))
+				ContinueLoop
 			EndIf
 		EndIf
 
-		HealMeIfYouCan()
 
 		CalculateStunChance()
 		;stun F5
@@ -712,7 +717,11 @@ Func Attack()
 			ContinueLoop;
 		EndIf
 
+
+		HealMeIfYouCan()
+		HealAndBuffUsWarcIfYouCan()
 		Sleep(Random(250,495,1))
+
 
 	WEnd
 
@@ -917,8 +926,6 @@ Func SelectTarget()
 	MakeCameraVerticalAgain()
 
 	;dvigaemsiav centr k warc i berem targetNext() ========================
-	;MakeCameraVerticalAgain()
-	;Sleep(Random(191,222,1))
 	MoveToPartymemberOne()
 	Sleep(Random(1111,1544,1))
 
@@ -978,7 +985,6 @@ Func SelectTarget()
 	WEnd
 
 	;dvigaemsiav centr k warc i berem targetNext() ========================
-	;Sleep(Random(191,222,1))
 	MoveToPartymemberOne()
 	Sleep(Random(1111,1544,1))
 
@@ -1037,8 +1043,6 @@ Func SelectTarget()
 	WEnd
 
 	;dvigaemsiav centr k warc i berem targetNext() ========================
-	;MakeCameraVerticalAgain()
-	;Sleep(Random(191,222,1))
 	MoveToPartymemberOne()
 	Sleep(Random(1111,1544,1))
 
@@ -1097,8 +1101,6 @@ Func SelectTarget()
 	WEnd
 
 	;dvigaemsiav centr k warc i berem targetNext() ========================
-	;MakeCameraVerticalAgain()
-	;Sleep(Random(191,222,1))
 	MoveToPartymemberOne()
 	Sleep(Random(1111,1544,1))
 
