@@ -105,11 +105,11 @@ Func IsAltTab()
     const $PosY = 400
 
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0xFFC90E, 10)
+                         0xED1C24, 10)
 
     const $MaxX = 790
     const $MinX = 510
-    const $MaxY = 400
+    const $MaxY = 450
 
     if not @error then
         if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
@@ -566,7 +566,7 @@ Func Attack()
 		MischiefManaged()
 		HealMeIfYouCan()
 		DanceAndSong()
-		;ChangeShadowWeapon()
+		ChangeShadowWeapon()
 
 		;esli u PMTwo HP ne max to proveriaem target s nego
 		If IsPMTwoAttacked() Then
@@ -590,7 +590,7 @@ Func Attack()
 		EndIf
 
 		;spoil F2
-		If Random(1, 100) > 94 Then
+		If Random(1, 100) > 95 Then
 			MouseClick("left", 434, (995 - $toSmallY), 2, 300)
 			Sleep(Random(550,995,1))
 			ContinueLoop;
@@ -638,7 +638,7 @@ Func MakeDS()
 	;F7
    MischiefManaged()
 	MouseClick("left", 620, (995 - $toSmallY), 2, 300)
-	Sleep(Random(111,294,1))
+	Sleep(Random(311,494,1))
 
 EndFunc
 
@@ -715,9 +715,18 @@ Func SelectTarget()
 			$targetDetected = True
 			Attack()
 			Return
-		EndIf
+		 EndIf
 
+		 MischiefManaged()
+	;proveriaet vzialsia li target po /targetnext
+	TargetNext()
+	If IsTargetExist() Then
+		$targetDetected = True
+		Attack()
+		Return
+	EndIf
 
+		 Sleep(550)
 	MischiefManaged()
 
 EndFunc
@@ -822,17 +831,19 @@ EndFunc
 
 Func DanceAndSong()
 
-local $index = 0
+local $index = 2
 
 	If	$lastBuffTime > 750000 Then
 
 		$BuffTimer = TimerInit()
 
 		ALTTAB($index)
+		Sleep(1000)
 
 		MakeDS()
 
 		ALTTAB($index)
+		Sleep(1000)
 
 		MakeDS()
 
@@ -859,7 +870,7 @@ While $defeatedMobs < 9164
 
 	Sweep()
 
-	MoveToPartymemberOne()
+	;MoveToPartymemberOne()
 
 	;PickUp()
 	;PickUp()
