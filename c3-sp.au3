@@ -10,9 +10,9 @@
 SRandom(@MSEC)
 global const $LogFile = "debugtest.log"
 ;small = 265 / large = 1
-global const $toSmallY = 1
+global const $toSmallY = 265
 ;small = 275 / large 1
-global const $toSmallX = 1
+global const $toSmallX = 275
 
 global $targetDetected = False
 global $pmOneThreatened = False
@@ -249,7 +249,7 @@ Func IsMyHPDamagedOver45()
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
                          0x421010, 10)
 
-    const $MaxX = 85
+    const $MaxX = 93
     const $MinX = 5
     const $MaxY = 100
 
@@ -564,8 +564,7 @@ EndFunc
 Func Attack()
 
    MischiefManaged()
-	;MouseClick("left", 392, 995, 2, 200)
-	;Sleep(Random(291,544,1))
+
 	MouseClick("left", 434, (995 - $toSmallY), 2, 300)
 	Sleep(Random(211, 394,1))
 
@@ -590,6 +589,7 @@ Func Attack()
 			If IsTargetExist() Then
 				$targetDetected = True
 				MouseClick("left", 392, (995 - $toSmallY), 2, 200)
+
 			EndIf
 		EndIf
 
@@ -601,6 +601,7 @@ Func Attack()
 			If IsTargetExist() Then
 				$targetDetected = True
 				MouseClick("left", 392, (995 - $toSmallY), 2, 200)
+
 			EndIf
 		EndIf
 
@@ -615,8 +616,9 @@ Func Attack()
 		EndIf
 
 		;spoil F2
-		If Random(1, 100) > 94 Then
+		If Random(1, 100) > 93 Then
 			MouseClick("left", 434, (995 - $toSmallY), 2, 300)
+
 			Sleep(Random(550,995,1))
 			ContinueLoop;
 		Else
@@ -1104,9 +1106,9 @@ EndFunc
 
 Func HealAndBuffUsWarcIfYouCan()
 
-	If	IsMyHPDamagedOver45() Or $lastBuffTime > 1100000 Then
+	If	IsMyHPDamagedOver45() Or $lastBuffTime > 960000 Then
 
-		InviteWarc()
+	   InviteWarc()
 
 		ALTTAB($warc)
 		If	$warc = 2 Then
@@ -1119,6 +1121,8 @@ Func HealAndBuffUsWarcIfYouCan()
 		ALTTAB($spolier)
 
 	EndIf
+
+	$lastBuffTime = TimerDiff($BuffTimer)
 
 EndFunc
 
@@ -1214,6 +1218,7 @@ Func AcceptInvite()
 			MouseClick("left", 466, (1020 - $toSmallY), 2, 200)
 			Sleep(Random(200, 400, 1))
 			$warcInParty = True
+			$safePDTimer = TimerInit()
 
 			ExitLoop
 		EndIf
@@ -1240,7 +1245,7 @@ Func BuffOrHeal()
 
 	$lastWCHealTime = TimerDiff($healWCTimer)
 
-	If	$lastBuffTime > 1100000 Then
+	If	$lastBuffTime > 960000 Then
 
 		$BuffTimer = TimerInit()
 		$safePDTimer = TimerInit()
@@ -1253,6 +1258,7 @@ Func BuffOrHeal()
 
 	Sleep(Random(211,344,1))
 	$lastBuffTime = TimerDiff($BuffTimer)
+	$safePartyDismiss = TimerDiff($safePDTimer)
 
 EndFunc
 
@@ -1261,10 +1267,11 @@ Func DismissWCFromParty()
 
 	Sleep(Random(531,744,1))
 
-	If $safePartyDismiss > 120000 And $warcInParty = True Then
+	If $safePartyDismiss > 56000 And $warcInParty = True Then
 
 		;press leave party on F12 third panels
 		MouseClick("left", 822, (890 - $toSmallY), 2, 200)
+		$safePDTimer = TimerInit()
 		$warcInParty = False
 		Sleep(Random(211,344,1))
 
@@ -1277,6 +1284,9 @@ EndFunc
 
 
 Func exec()
+
+   $healWCTimer = TimerInit()
+   $BuffTimer = TimerInit()
 
 ;script budet ispolniatsa poka kolvo prohodov zika budet menshe
 While $defeatedMobs < 9164

@@ -1,3 +1,4 @@
+#RequireAdmin
 ;==============================================================================================
 ;======================================== declaration =========================================
 ;==============================================================================================
@@ -10,9 +11,9 @@
 SRandom(@MSEC)
 global const $LogFile = "debugtest.log"
 ;small = 265 / large = 1
-global const $toSmallY = 1
+global const $toSmallY = 265
 ;small = 275 / large 1
-global const $toSmallX = 1
+global const $toSmallX = 275
 
 global $targetDetected = False
 global $pmOneThreatened = False
@@ -29,7 +30,7 @@ global $stunChance = 0
 global $firstSWChanged = False
 global $secondSWChanged = False
 
-global $lastBuffTime = 1080001
+global $lastBuffTime = 750001
 global $BuffTimer = 0
 
 ;start: 1, fight:1
@@ -104,11 +105,11 @@ Func IsAltTab()
     const $PosY = 400
 
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0xFFC90E, 10)
+                         0xED1C24, 10)
 
     const $MaxX = 790
     const $MinX = 510
-    const $MaxY = 400
+    const $MaxY = 450
 
     if not @error then
         if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
@@ -565,18 +566,7 @@ Func Attack()
 		MischiefManaged()
 		HealMeIfYouCan()
 		DanceAndSong()
-		;ChangeShadowWeapon()
-
-		;esli u PMOne HP ne max to proveriaem target s nego
-		If IsPMOneAttacked() Then
-
-			;proveriaem ne sagrilsia li mob na party member one
-			TakeAssistFromPMOne()
-			If IsTargetExist() Then
-				$targetDetected = True
-				MouseClick("left", 392, (995 - $toSmallY), 2, 200)
-			EndIf
-		EndIf
+		ChangeShadowWeapon()
 
 		;esli u PMTwo HP ne max to proveriaem target s nego
 		If IsPMTwoAttacked() Then
@@ -585,7 +575,7 @@ Func Attack()
 			TakeAssistFromPMTwo()
 			If IsTargetExist() Then
 				$targetDetected = True
-				MouseClick("left", 392, (995 - $toSmallY), 2, 200)
+				Attack()
 			EndIf
 		EndIf
 
@@ -600,7 +590,7 @@ Func Attack()
 		EndIf
 
 		;spoil F2
-		If Random(1, 100) > 94 Then
+		If Random(1, 100) > 95 Then
 			MouseClick("left", 434, (995 - $toSmallY), 2, 300)
 			Sleep(Random(550,995,1))
 			ContinueLoop;
@@ -626,51 +616,6 @@ Func ClearTarget()
 EndFunc
 
 
-Func MakeCameraVerticalAgain()
-
-	If $toSmallY = 1 or $toSmallX = 1 Then
-		;large
-		MouseClickDrag ( "right", 950, 420, 950, 550, 200)
-
-	Else
-		;small
-		MouseClickDrag ( "right", 680, 300, 680, 430, 200)
-
-	EndIf
-
-	Sleep(Random(111,344,1))
-
-EndFunc
-
-Func MoveLeftUp()
-
-	MouseClick("left", (500 - $toSmallX), (250 - ($toSmallY /2)), 1, 200)
-	Sleep(Random(111,344,1))
-
-EndFunc
-
-Func MoveRightUp()
-
-	MouseClick("left", (1550 - ($toSmallX *2)), (250 - ($toSmallY /2)), 1, 200)
-	Sleep(Random(111,344,1))
-
-EndFunc
-
-Func MoveRightDown()
-
-	MouseClick("left", (1550 - ($toSmallX *2)) , (840 - $toSmallY), 1, 200)
-	Sleep(Random(111,344,1))
-
-EndFunc
-
-Func MoveLeftDown()
-
-	;MouseClick("left", 500, 840, 1, 200)
-	MouseClick("left", (500 - $toSmallX), (840 - $toSmallY), 1, 200)
-	Sleep(Random(111,344,1))
-
-EndFunc
-
 Func TargetNext()
 
    MischiefManaged()
@@ -693,7 +638,7 @@ Func MakeDS()
 	;F7
    MischiefManaged()
 	MouseClick("left", 620, (995 - $toSmallY), 2, 300)
-	Sleep(Random(111,294,1))
+	Sleep(Random(311,494,1))
 
 EndFunc
 
@@ -743,19 +688,7 @@ Func SelectTarget()
 		Return
 	EndIf
 
-	;esli u PMOne HP ne max to proveriaem target s nego
-	;inache proveriaem target na sebe, potom nextTarget()
 	MischiefManaged()
-	If IsPMOneAttacked() Then
-
-		;proveriaem ne sagrilsia li mob na party member one
-		TakeAssistFromPMOne()
-		If IsTargetExist() Then
-			$targetDetected = True
-			Attack()
-			Return
-		EndIf
-	EndIf
 
 	;esli u PMTwo HP ne max to proveriaem target s nego
 	If IsPMTwoAttacked() Then
@@ -782,9 +715,18 @@ Func SelectTarget()
 			$targetDetected = True
 			Attack()
 			Return
-		EndIf
+		 EndIf
 
+		 MischiefManaged()
+	;proveriaet vzialsia li target po /targetnext
+	TargetNext()
+	If IsTargetExist() Then
+		$targetDetected = True
+		Attack()
+		Return
+	EndIf
 
+		 Sleep(550)
 	MischiefManaged()
 
 EndFunc
@@ -824,28 +766,6 @@ Func Heal()
 
 EndFunc
 
-
-Func DanceAndSong()
-
-	If	IsMyHPDamagedOver80() or IsPMOneOrTwoHPBelow90() Or $lastBuffTime > 750000 Then
-
-		$BuffTimer = TimerInit()
-
-		ALTTAB(2)
-
-		MakeDS()
-
-		ALTTAB(2)
-
-		MakeDS()
-
-		ALTTAB(2)
-
-	EndIf
-
-	$lastBuffTime = TimerDiff($BuffTimer)
-
-EndFunc
 
 Func startALTTABProc()
 	Sleep(Random(211,744,1))
@@ -909,6 +829,31 @@ Func ALTTAB($q)
 
 EndFunc
 
+Func DanceAndSong()
+
+local $index = 2
+
+	If	$lastBuffTime > 750000 Then
+
+		$BuffTimer = TimerInit()
+
+		ALTTAB($index)
+		Sleep(1000)
+
+		MakeDS()
+
+		ALTTAB($index)
+		Sleep(1000)
+
+		MakeDS()
+
+		ALTTAB($index)
+
+	EndIf
+
+	$lastBuffTime = TimerDiff($BuffTimer)
+
+EndFunc
 
 Func exec()
 
@@ -924,6 +869,8 @@ While $defeatedMobs < 9164
 	WEnd
 
 	Sweep()
+
+	;MoveToPartymemberOne()
 
 	;PickUp()
 	;PickUp()
