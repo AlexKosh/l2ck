@@ -271,6 +271,39 @@ Func IsPMFourAttacked()
     endif
 endfunc
 
+Func IsPMFiveAttacked()
+    const $SizeSearch = 40
+    const $MinNbPixel = 3
+    const $OptNbPixel = 10
+    const $PosX = 155
+    const $PosY = 300
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x5E2936, 10)
+
+    const $MaxX = 330
+    const $MinX = 15
+    const $MaxY = 490
+	const $MinY = 460
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+endfunc
+
 Func IsMyHPDamaged()
 
     const $SizeSearch = 80
@@ -403,6 +436,7 @@ Func IsMyHPDamagedOver80()
     endif
 endfunc
 
+;for mass heal warc
 Func IsPMOneOrTwoHPBelow90()
     const $SizeSearch = 40
     const $MinNbPixel = 3
@@ -413,7 +447,7 @@ Func IsPMOneOrTwoHPBelow90()
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
                          0x5E2936, 10)
 
-    const $MaxX = 150
+    const $MaxX = 110
     const $MinX = 15
     const $MaxY = 450
 	const $MinY = 280
@@ -654,6 +688,20 @@ Func Attack()
 			EndIf
 		EndIf
 
+		;esli u PMFive HP ne max to proveriaem target s nego
+		If IsPMFiveAttacked() Then
+
+			;proveriaem ne sagrilsia li mob na party member one
+			TakeAssistFromPMFive()
+			If IsTargetExist() Then
+				$targetDetected = True
+				MouseClick("left", 434, (995 - $toSmallY), 2, 150)
+				HealAndBuffUsWarcIfYouCan()
+				Sleep(Random(550,995,1))
+				ContinueLoop
+			EndIf
+		EndIf
+
 		;esli u PMFour HP ne max to proveriaem target s nego
 		If IsPMFourAttacked() Then
 
@@ -843,6 +891,13 @@ Func TakeAssistFromPMFour()
 
 EndFunc
 
+Func TakeAssistFromPMFive()
+
+	MouseClick("right", 85, 470, 2, 300)
+	Sleep(Random(211,344,1))
+
+EndFunc
+
 Func SelectTarget()
 
 	HealMeIfYouCan()
@@ -900,6 +955,18 @@ Func SelectTarget()
 
 		;proveriaem ne sagrilsia li mob na party member one
 		TakeAssistFromPMFour()
+		If IsTargetExist() Then
+			$targetDetected = True
+			Attack()
+			Return
+		EndIf
+	EndIf
+
+	;esli u PMFour HP ne max to proveriaem target s nego
+	If IsPMFiveAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMFive()
 		If IsTargetExist() Then
 			$targetDetected = True
 			Attack()
@@ -980,6 +1047,18 @@ Func SelectTarget()
 
 		;proveriaem ne sagrilsia li mob na party member one
 		TakeAssistFromPMFour()
+		If IsTargetExist() Then
+			$targetDetected = True
+			Attack()
+			Return
+		EndIf
+	EndIf
+
+	;esli u PMFour HP ne max to proveriaem target s nego
+	If IsPMFiveAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMFive()
 		If IsTargetExist() Then
 			$targetDetected = True
 			Attack()
@@ -1069,6 +1148,18 @@ Func SelectTarget()
 		EndIf
 	EndIf
 
+	;esli u PMFour HP ne max to proveriaem target s nego
+	If IsPMFiveAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMFive()
+		If IsTargetExist() Then
+			$targetDetected = True
+			Attack()
+			Return
+		EndIf
+	EndIf
+
 		;tut idet proverka ne napal li agro-mob i ne vzialsia li target avtomatom
 		If IsTargetExist() Then
 			$targetDetected = True
@@ -1151,6 +1242,18 @@ Func SelectTarget()
 		EndIf
 	EndIf
 
+	;esli u PMFour HP ne max to proveriaem target s nego
+	If IsPMFiveAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMFive()
+		If IsTargetExist() Then
+			$targetDetected = True
+			Attack()
+			Return
+		EndIf
+	EndIf
+
 		;tut idet proverka ne napal li agro-mob i ne vzialsia li target avtomatom
 		If IsTargetExist() Then
 			$targetDetected = True
@@ -1226,6 +1329,18 @@ Func SelectTarget()
 
 		;proveriaem ne sagrilsia li mob na party member one
 		TakeAssistFromPMFour()
+		If IsTargetExist() Then
+			$targetDetected = True
+			Attack()
+			Return
+		EndIf
+	EndIf
+
+	;esli u PMFour HP ne max to proveriaem target s nego
+	If IsPMFiveAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMFive()
 		If IsTargetExist() Then
 			$targetDetected = True
 			Attack()
@@ -1359,7 +1474,7 @@ EndFunc
 
 Func BuffOrHeal()
 
-	If	$lastWCHealTime > 14000 And (IsMyHPDamagedOver80() or IsPMOneOrTwoHPBelow90()) Then
+	If	($lastWCHealTime > 14000 And  $lastBuffTime > 16000) And (IsMyHPDamagedOver80() or IsPMOneOrTwoHPBelow90()) Then
 
 		$healWCTimer = TimerInit()
 
