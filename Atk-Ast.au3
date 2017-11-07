@@ -30,6 +30,10 @@ global $AlacrityTimer = 0
 global $lastBuffTime = 1080001
 global $BuffTimer = 0
 
+HotKeySet("{F11}", "_Attack")
+HotKeySet("{F12}", "_Halt")
+
+global $isHalt = True
 
 
 Func ErrorSound()
@@ -564,52 +568,59 @@ EndFunc
 
 Func exec()
 
-	TargetOnPMTwo()
+	While True
 
-	While IsPMTwoHPBelow30() = False
-
-		Sleep(Random(511,844,1))
+		Sleep(100)
 		MischiefManaged()
 
-		Beep(700, 40)
-
-		Attack()
 	WEnd
 
-	StopAttack()
-	Sleep(Random(511,844,1))
 
-	TargetOnPMThree()
-
-	While IsPMThreeHPBelow30() = False
-
-		Sleep(Random(511,844,1))
-		MischiefManaged()
-
-		Beep(700, 40)
-
-		Attack()
-	WEnd
-
-	StopAttack()
-	Sleep(Random(511,844,1))
-
-	TargetOnPMFour()
-
-	While IsPMFourHPBelow30() = False
-
-		Sleep(Random(511,844,1))
-		MischiefManaged()
-
-		Beep(700, 40)
-
-		Attack()
-	WEnd
-
-	StopAttack()
-	Sleep(Random(511,844,1))
 
 EndFunc
+
+Func _Attack()
+
+	$isHalt = False
+
+	While $isHalt = False
+
+		TakeAssistFromPMOne()
+
+		If IsTargetExist() Then
+			Attack()
+			ALTTAB(1)
+		EndIf
+
+		TakeAssistFromPMOne()
+		Attack()
+
+		While IsTargetExist()
+			Sleep(Random(251,444,1))
+			MischiefManaged()
+		WEnd
+
+		Sleep(Random(251,444,1))
+		MischiefManaged()
+	WEnd
+
+
+EndFunc
+
+Func _Halt()
+
+	$isHalt = True
+
+	While $isHalt = True
+
+		Sleep(Random(251,444,1))
+		MischiefManaged()
+
+	WEnd
+
+EndFunc
+
+
 
 
 ;==============================================================================================
@@ -624,7 +635,7 @@ Sleep(Random(1911,2544,1))
 
 StartSound()
 Sleep(Random(111,344,1))
-;startALTTABProc()
+startALTTABProc()
 
 exec()
 
