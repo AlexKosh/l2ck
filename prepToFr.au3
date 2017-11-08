@@ -30,6 +30,12 @@ global $AlacrityTimer = 0
 global $lastBuffTime = 1080001
 global $BuffTimer = 0
 
+HotKeySet("{F11}", "_PrepToDestr")
+HotKeySet("{F10}", "_Halt")
+HotKeySet("{F9}", "_FollowMe")
+
+global $isSSDOff = False
+
 
 
 Func ErrorSound()
@@ -122,13 +128,13 @@ Func IsPMTwoHPBelow30()
     const $SizeSearch = 40
     const $MinNbPixel = 3
     const $OptNbPixel = 10
-    const $PosX = 58
-    const $PosY = 300
+    const $PosX = 48
+    const $PosY = 340
 
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
                          0x5E2936, 10)
 
-    const $MaxX = 69
+    const $MaxX = 58
     const $MinX = 15
     const $MaxY = 360
 	const $MinY = 320
@@ -153,15 +159,15 @@ endfunc
 
 Func IsPMThreeHPBelow30()
     const $SizeSearch = 40
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 58
-    const $PosY = 300
+    const $MinNbPixel = 2
+    const $OptNbPixel = 5
+    const $PosX = 55
+    const $PosY = 390
 
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
                          0x5E2936, 10)
 
-    const $MaxX = 69
+    const $MaxX = 59
     const $MinX = 15
     const $MaxY = 410
 	const $MinY = 370
@@ -186,15 +192,114 @@ endfunc
 
 Func IsPMFourHPBelow30()
     const $SizeSearch = 40
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 58
-    const $PosY = 300
+    const $MinNbPixel = 2
+    const $OptNbPixel = 5
+    const $PosX = 48
+    const $PosY = 430
 
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
                          0x5E2936, 10)
 
-    const $MaxX = 69
+    const $MaxX = 58
+    const $MinX = 15
+    const $MaxY = 450
+	const $MinY = 410
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+ endfunc
+
+Func IsPMTwoHPBelow40()
+    const $SizeSearch = 40
+    const $MinNbPixel = 3
+    const $OptNbPixel = 10
+    const $PosX = 48
+    const $PosY = 340
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x5E2936, 10)
+
+    const $MaxX = 80
+    const $MinX = 15
+    const $MaxY = 360
+	const $MinY = 320
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+endfunc
+
+Func IsPMThreeHPBelow40()
+    const $SizeSearch = 40
+    const $MinNbPixel = 2
+    const $OptNbPixel = 5
+    const $PosX = 48
+    const $PosY = 390
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x5E2936, 10)
+
+    const $MaxX = 80
+    const $MinX = 15
+    const $MaxY = 410
+	const $MinY = 370
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+endfunc
+
+Func IsPMFourHPBelow40()
+    const $SizeSearch = 40
+    const $MinNbPixel = 2
+    const $OptNbPixel = 5
+    const $PosX = 48
+    const $PosY = 430
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x5E2936, 10)
+
+    const $MaxX = 80
     const $MinX = 15
     const $MaxY = 450
 	const $MinY = 410
@@ -382,6 +487,15 @@ Func Attack()
 
 EndFunc
 
+;second panel F12
+Func ToggleSSD()
+
+   MischiefManaged()
+	MouseClick("right", 818, (950 - $toSmallY), 1, 300)
+	Sleep(Random(211,344,1))
+
+EndFunc
+
 ;F7
 Func PickUp()
 
@@ -562,13 +676,23 @@ Func ALTTAB($q)
 
 EndFunc
 
-Func exec()
+Func _PrepToDestr()
+
+	$isHalt = False
+
+	While $isHalt = False
 
 	TargetOnPMTwo()
 
 	While IsPMTwoHPBelow30() = False
 
-		Sleep(Random(511,844,1))
+		If	IsPMTwoHPBelow40() And $isSSDOff = False Then
+			$isSSDOff = True
+			ToggleSSD()
+		EndIf
+
+
+		Sleep(Random(311,544,1))
 		MischiefManaged()
 
 		Beep(700, 40)
@@ -578,11 +702,18 @@ Func exec()
 
 	StopAttack()
 	Sleep(Random(511,844,1))
+	ToggleSSD()
+	$isSSDOff = False
 
 	TargetOnPMThree()
 
 	While IsPMThreeHPBelow30() = False
 
+		If	IsPMThreeHPBelow40() And $isSSDOff = False Then
+			$isSSDOff = True
+			ToggleSSD()
+		EndIf
+
 		Sleep(Random(511,844,1))
 		MischiefManaged()
 
@@ -593,11 +724,18 @@ Func exec()
 
 	StopAttack()
 	Sleep(Random(511,844,1))
+	ToggleSSD()
+	$isSSDOff = False
 
 	TargetOnPMFour()
 
 	While IsPMFourHPBelow30() = False
 
+		If	IsPMFourHPBelow40() And $isSSDOff = False Then
+			$isSSDOff = True
+			ToggleSSD()
+		EndIf
+
 		Sleep(Random(511,844,1))
 		MischiefManaged()
 
@@ -608,6 +746,42 @@ Func exec()
 
 	StopAttack()
 	Sleep(Random(511,844,1))
+
+	ToggleSSD()
+	$isSSDOff = False
+
+	WEnd
+
+EndFunc
+
+
+Func _Halt()
+
+	$isHalt = True
+
+	Beep(600, 50)
+	Beep(500, 50)
+
+	StopAttack()
+
+	If $isSSDOff = True Then
+		$isSSDOff = False
+		ToggleSSD()
+	EndIf
+
+	While $isHalt = True
+
+		Sleep(Random(251,444,1))
+		MischiefManaged()
+
+	WEnd
+
+EndFunc
+
+Func _FollowMe()
+
+   SuccessSound()
+   MoveToPartymemberOne()
 
 EndFunc
 
@@ -626,7 +800,12 @@ StartSound()
 Sleep(Random(111,344,1))
 ;startALTTABProc()
 
-exec()
+While True
+
+	Sleep(1000)
+	MischiefManaged()
+
+WEnd
 
 
 SuccessSound()
