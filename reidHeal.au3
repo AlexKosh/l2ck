@@ -24,39 +24,17 @@ global $defeatedMobs = 0
 global $lastHealTime = 20001
 global $healTimer = 0
 
-global $lastAlacrityTime = 1140001
-global $AlacrityTimer = 0
-
-global $stunChance = 0
-
-global $firstSWChanged = False
-global $secondSWChanged = False
-
 global $lastBuffTime = 1080001
 global $BuffTimer = 0
 
 global $lastEEHealTime = 30001
 global $healEETimer = 0
 
-;start: 1, fight:1
-global $spolier = 0
-;start: 1, fight: 2
-global $warc = 0
-;start: 2, fight:1
-global $healer = 0
-
-global $safePartyDismiss = 0
-global $safePDTimer = 0
-
-global $lastWCHealTime = 30001
-global $healWCTimer = 0
-
-global $warcInParty = False
-
 HotKeySet("{F11}", "_HealMode")
 HotKeySet("{F10}", "_Halt")
 HotKeySet("{F9}", "_FollowMe")
 
+global $isHalt = True
 
 Func ErrorSound()
 	Beep(1200, 100)
@@ -993,6 +971,76 @@ Func BuffOrHeal()
 
 EndFunc
 
+Func _HealMode()
+
+	SuccessSound()
+
+	$isHalt = False
+
+	While $isHalt = False
+
+		If	IsPMOneAttacked() Then
+
+			TargetOnPMOne()
+
+			If	IsPMOneHPBelow60() Then
+
+				MajorHeal()
+
+			EndIf
+
+			GreaterHeal()
+
+		EndIf
+
+		If	IsPMTwoAttacked() Then
+
+			TargetOnPMTwo()
+
+			If	IsPMTwoHPBelow60() Then
+
+				MajorHeal()
+
+			EndIf
+
+			GreaterHeal()
+
+		EndIf
+
+		If	IsPMThreeAttacked() Then
+
+			TargetOnPMThree()
+
+			If	IsPMThreeHPBelow60() Then
+
+				MajorHeal()
+
+			EndIf
+
+			GreaterHeal()
+
+		EndIf
+
+	WEnd
+
+EndFunc
+
+Func _Halt()
+
+	$isHalt = True
+
+	Beep(600, 50)
+	Beep(500, 50)
+
+	While $isHalt = True
+
+		Sleep(Random(251,444,1))
+		MischiefManaged()
+
+	WEnd
+
+EndFunc
+
 Func _FollowMe()
 
    SuccessSound()
@@ -1025,80 +1073,9 @@ Func exec()
 ;script budet ispolniatsa poka kolvo prohodov zika budet menshe
 While True
 
-;Beep(600, 50)
-
-	HealMyself()
-
-
-	If	IsPMOneAttacked() Then
-
-	   Beep(600, 50)
-
-	   TargetOnPMOne()
-	   MajorHeal()
-	   GreaterHeal()
-	   ClearTarget()
-
-	   Sleep(Random(311,644,1))
-
-	EndIf
-
-	If	IsPMTwoAttacked() Then
-
-	   Beep(600, 50)
-
-	   TargetOnPMTwo()
-	   MajorHeal()
-	   GreaterHeal()
-	   ClearTarget()
-
-	   Sleep(Random(311,644,1))
-
-	EndIf
-
-	If	IsPMThreeAttacked() Then
-
-	   Beep(600, 50)
-
-	   TargetOnPMThree()
-	   MajorHeal()
-	   GreaterHeal()
-	   ClearTarget()
-
-	   Sleep(Random(311,644,1))
-
-	EndIf
-
-	If	IsPMFourAttacked() Then
-
-	   Beep(600, 50)
-
-	   TargetOnPMFour()
-	   MajorHeal()
-	   GreaterHeal()
-	   ClearTarget()
-
-	   Sleep(Random(311,644,1))
-
-	EndIf
-
-	If	IsPMFiveAttacked() Then
-
-	   Beep(600, 50)
-
-	   TargetOnPMFive()
-	   MajorHeal()
-	   GreaterHeal()
-	   ClearTarget()
-
-	   Sleep(Random(311,644,1))
-
-	EndIf
-
-
-
-	Sleep(Random(511,944,1))
+	Sleep(100)
 	MischiefManaged()
+
 WEnd
 
 EndFunc
