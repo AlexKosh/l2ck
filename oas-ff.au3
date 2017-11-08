@@ -10,9 +10,9 @@
 SRandom(@MSEC)
 global const $LogFile = "debugtest.log"
 ;small = 265 / large = 1
-global const $toSmallY = 1
+global const $toSmallY = 265
 ;small = 275 / large 1
-global const $toSmallX = 1
+global const $toSmallX = 275
 
 global $targetDetected = False
 global $pmOneThreatened = False

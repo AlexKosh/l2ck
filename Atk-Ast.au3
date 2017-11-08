@@ -10,9 +10,9 @@
 SRandom(@MSEC)
 global const $LogFile = "debugtest.log"
 ;small = 265 / large = 1
-global const $toSmallY = 1
+global const $toSmallY = 265
 ;small = 275 / large 1
-global const $toSmallX = 1
+global const $toSmallX = 275
 
 global $targetDetected = False
 global $pmOneThreatened = False
@@ -31,7 +31,8 @@ global $lastBuffTime = 1080001
 global $BuffTimer = 0
 
 HotKeySet("{F11}", "_Attack")
-HotKeySet("{F12}", "_Halt")
+HotKeySet("{F10}", "_Halt")
+HotKeySet("{F9}", "_FollowMe")
 
 global $isHalt = True
 
@@ -287,7 +288,7 @@ Func IsMyHPDamaged()
     endif
 endfunc
 
-Func IsMyHPDamagedOver45()
+Func IsMyHPDamagedOver30()
 
     const $SizeSearch = 80
     const $MinNbPixel = 3
@@ -298,7 +299,7 @@ Func IsMyHPDamagedOver45()
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
                          0x421010, 10)
 
-    const $MaxX = 85
+    const $MaxX = 55
     const $MinX = 5
     const $MaxY = 100
 
@@ -391,6 +392,15 @@ Func PickUp()
 
    MischiefManaged()
 	MouseClick("left", 620, (995 - $toSmallY), 2, 300)
+	Sleep(Random(111,294,1))
+
+EndFunc
+
+;F6
+Func Frenzy()
+
+   MischiefManaged()
+	MouseClick("left", 580, (995 - $toSmallY), 2, 300)
 	Sleep(Random(111,294,1))
 
 EndFunc
@@ -524,7 +534,7 @@ EndFunc
 Func startALTTABProc()
 	Sleep(Random(211,744,1))
 
-	Beep(400, 400)
+	Beep(400, 300)
 	Send("{ALTDOWN}")
 	Sleep(Random(211,344,1))
 	Send("{TAB}")
@@ -533,22 +543,13 @@ Func startALTTABProc()
 	Sleep(Random(211,344,1))
 	Send("{ALTUP}")
 
-	 Sleep(Random(2211,2744,1))
-
-	 Beep(400, 400)
-	Send("{ALTDOWN}")
-	Sleep(Random(211,344,1))
-	Send("{TAB}")
-	Sleep(Random(211,344,1))
-	Send("{ALTUP}")
-
-	 Sleep(Random(2211,2744,1))
+   Sleep(Random(1211,1744,1))
 
 EndFunc
 
 Func ALTTAB($q)
 
-	Sleep(Random(251,444,1))
+	Sleep(Random(151,244,1))
 	Send("{ALTDOWN}")
 
 	While $q > 0
@@ -565,6 +566,25 @@ Func ALTTAB($q)
 	Sleep(Random(511,644,1))
 
 EndFunc
+
+Func FrenzyIfICan()
+
+   If IsMyHPDamagedOver30() Then
+
+	  SuccessSound()
+
+	  Frenzy()
+	  ALTTAB(1)
+	  Sleep(Random(151,244,1))
+	  Frenzy()
+	  ALTTAB(1)
+	  Sleep(Random(151,244,1))
+	  Frenzy()
+
+   EndIf
+
+EndFunc
+
 
 Func exec()
 
@@ -588,15 +608,22 @@ Func _Attack()
 		TakeAssistFromPMOne()
 
 		If IsTargetExist() Then
+		   Beep(600, 50)
+		   Beep(500, 50)
+		   Beep(700, 50)
 			Attack()
 			ALTTAB(1)
-		EndIf
+		 Else
+			Sleep(Random(151,244,1))
+			ContinueLoop
+		 EndIf
+
 
 		TakeAssistFromPMOne()
 		Attack()
 
 		While IsTargetExist()
-			Sleep(Random(251,444,1))
+			Sleep(50)
 			MischiefManaged()
 		WEnd
 
@@ -611,6 +638,9 @@ Func _Halt()
 
 	$isHalt = True
 
+	Beep(600, 50)
+	Beep(500, 50)
+
 	While $isHalt = True
 
 		Sleep(Random(251,444,1))
@@ -620,6 +650,15 @@ Func _Halt()
 
 EndFunc
 
+Func _FollowMe()
+
+   SuccessSound()
+   MoveToPartymemberOne()
+   ALTTAB(1)
+   Sleep(Random(151,244,1))
+   MoveToPartymemberOne()
+
+EndFunc
 
 
 
