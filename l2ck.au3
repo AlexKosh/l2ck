@@ -74,6 +74,37 @@ Func IsTargetExist()
     endif
  endfunc
 
+Func IsTargetNotMe()
+    const $SizeSearch = 80
+    const $MinNbPixel = 2
+    const $OptNbPixel = 7
+    const $PosX = 420
+    const $PosY = 59
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x009ADE, 10)
+
+    const $MaxX = 690
+    const $MinX = 410
+    const $MaxY = 100
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+ endfunc
 ;===============DESTROPREP====================
 
 Func IsPMTwoHPBelow30()

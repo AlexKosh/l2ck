@@ -305,7 +305,7 @@ Func IsMyHPDamagedOver60()
         return False
     endif
 endfunc
-
+;actual 50%
 Func IsMyHPDamagedOver80()
 
     const $SizeSearch = 80
@@ -317,7 +317,7 @@ Func IsMyHPDamagedOver80()
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
                          0x421010, 10)
 
-    const $MaxX = 130
+    const $MaxX = 90
     const $MinX = 5
     const $MaxY = 100
 
@@ -339,18 +339,18 @@ Func IsMyHPDamagedOver80()
     endif
 endfunc
 
-;for mass heal warc
+;for mass heal warc on 50%
 Func IsPMOneOrTwoHPBelow90()
     const $SizeSearch = 40
     const $MinNbPixel = 3
     const $OptNbPixel = 10
-    const $PosX = 110
+    const $PosX = 50
     const $PosY = 300
 
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
                          0x5E2936, 10)
 
-    const $MaxX = 110
+    const $MaxX = 95
     const $MinX = 15
     const $MaxY = 450
 	const $MinY = 280
@@ -466,8 +466,13 @@ Func Attack()
 
 	While IsTargetExist()
 
+		If isTargetNotMe() Then
+			ClearTarget()
+		EndIf
+
 
 		HealMeIfYouCan()
+		HealAndBuffUsWarcIfYouCan()
 		;ChangeShadowWeapon()
 
 		;esli u PMThree HP ne max to proveriaem target s nego
@@ -575,7 +580,14 @@ EndFunc
 
 Func ClearTarget()
 
-	MouseClick("left", 562, 44, 2, 200)
+   Send("{SHIFTDOWN}")
+
+	MouseClick("left", 601, 44, 1, 200)
+	Sleep(Random(211, 311,1))
+
+	Send("{SHIFTUP}")
+
+	Sleep(Random(211, 311,1))
 
 EndFunc
 
@@ -657,6 +669,7 @@ Func SelectTarget()
 
 	;ChangeShadowWeapon()
 	Sleep(Random(90,120,1))
+
 	;tut idet proverka ne napal li agro-mob i ne vzialsia li target avtomatom
 	If IsTargetExist() Then
 		$targetDetected = True
@@ -1152,7 +1165,7 @@ EndFunc
 
 Func HealAndBuffUsWarcIfYouCan()
 
-	If	($lastWCHealTime > 14000 And (IsMyHPDamagedOver80() or IsPMOneOrTwoHPBelow90())) Or $lastBuffTime > 1080000 Then
+	If	($lastWCHealTime > 14000 And (IsMyHPDamagedOver80() or IsPMOneOrTwoHPBelow90()) Or IsPMTwoAttacked()) Or $lastBuffTime > 1080000 Then
 
 		ALTTAB(1)
 
@@ -1215,7 +1228,7 @@ EndFunc
 
 Func BuffOrHeal()
 
-	If	($lastWCHealTime > 14000 And  $lastBuffTime > 16000) And (IsMyHPDamagedOver80() or IsPMOneOrTwoHPBelow90()) Then
+	If	($lastWCHealTime > 14000 And  $lastBuffTime > 16000) And (IsMyHPDamagedOver80() or IsPMOneOrTwoHPBelow90() or IsPMTwoAttacked()) Then
 
 		$healWCTimer = TimerInit()
 
@@ -1280,7 +1293,7 @@ startALTTABProc()
 
 While True
 
-	sleep(100)
+	sleep(1000)
 
 WEnd
 
