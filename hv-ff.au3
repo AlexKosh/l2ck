@@ -2,7 +2,7 @@
 ;======================================== declaration =========================================
 ;==============================================================================================
 
-#include "FastFind.au3"
+#include "l2ck.au3"
 #include <Date.au3>
 #include <MsgBoxConstants.au3>
 #RequireAdmin
@@ -10,9 +10,9 @@
 SRandom(@MSEC)
 global const $LogFile = "debugtest.log"
 ;small = 265 / large = 1
-global const $toSmallY = 1
+$toSmallY = 1
 ;small = 275 / large 1
-global const $toSmallX = 1
+$toSmallX = 1
 
 global $targetDetected = False
 global $pmOneThreatened = False
@@ -38,105 +38,45 @@ global $BuffTimer = 0
 global $lastEEHealTime = 30001
 global $healEETimer = 0
 
-;start: 1, fight:1
-global $spolier = 0
-;start: 1, fight: 2
-global $warc = 0
-;start: 2, fight:1
-global $healer = 0
-
 global $safePartyDismiss = 0
 global $safePDTimer = 0
 
 global $lastWCHealTime = 30001
 global $healWCTimer = 0
 
-global $warcInParty = False
 
+HotKeySet("{F11}", "_HealMode")
+HotKeySet("{F10}", "_Halt")
+HotKeySet("{F9}", "_FollowMe")
+HotKeySet("!{Esc}", "_Terminate")
 
-Func ErrorSound()
-	Beep(1200, 100)
-	Beep(900, 100)
+Func _Halt()
+
+	$isHalt = True
+
+	Beep(600, 50)
+	Beep(500, 50)
+
+	While $isHalt = True
+
+		Sleep(Random(251,444,1))
+
+	WEnd
+
 EndFunc
 
-Func SuccessSound()
-	Beep(400, 100)
-	Beep(500, 100)
-EndFunc
+Func _FollowMe()
 
-Func StartSound()
-	Beep(200, 100)
-	Beep(300, 100)
+   SuccessSound()
+   MoveToPartymemberOne()
+   ALTTAB(1)
+   Sleep(Random(151,244,1))
+   MoveToPartymemberOne()
+
 EndFunc
 
 func LogWrite($data)
     FileWrite($LogFile, $data & chr(10))
-endfunc
-
-;proveriaet nalichie pixela krasnogo zveta kak hp v oblasti gde target
-;true if >1hp na target, false if targeta net ili u targeta net hp ili hp polosi
-Func IsTargetExist()
-    const $SizeSearch = 80
-    const $MinNbPixel = 2
-    const $OptNbPixel = 7
-    const $PosX = 420
-    const $PosY = 59
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0xD61841, 10)
-
-    const $MaxX = 690
-    const $MinX = 410
-    const $MaxY = 100
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
- endfunc
-
-Func IsAltTab()
-    const $SizeSearch = 80
-    const $MinNbPixel = 10
-    const $OptNbPixel = 50
-    const $PosX = 630
-    const $PosY = 400
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0xED1C24, 10)
-
-    const $MaxX = 790
-    const $MinX = 510
-    const $MaxY = 400
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
 endfunc
 
 Func IsPMOneAttacked()
@@ -469,39 +409,6 @@ Func IsPMFourHPBelow60()
     endif
 endfunc
 
-Func IsMyHPDamaged()
-
-    const $SizeSearch = 80
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 160
-    const $PosY = 75
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0x421010, 10)
-
-    const $MaxX = 180
-    const $MinX = 10
-    const $MaxY = 100
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
-endfunc
-
 Func IsMyHPDamagedOver45()
 
     const $SizeSearch = 80
@@ -718,7 +625,7 @@ EndFunc
 ;F9
 Func TargetNext()
 
-   MischiefManaged()
+
 	MouseClick("left", 707, (995 - $toSmallY), 2, 300)
 	Sleep(Random(211,344,1))
 
@@ -727,7 +634,7 @@ EndFunc
 ;F7
 Func PickUp()
 
-   MischiefManaged()
+
 	MouseClick("left", 620, (995 - $toSmallY), 2, 300)
 	Sleep(Random(111,294,1))
 
@@ -736,7 +643,7 @@ EndFunc
 ;F4
 Func MajorHeal()
 
-   MischiefManaged()
+
 	MouseClick("left", 515, (995 - $toSmallY), 2, 150)
 	Sleep(Random(111,294,1))
 
@@ -744,7 +651,7 @@ EndFunc
 ;F2
 Func GreaterHeal()
 
-   MischiefManaged()
+
 	MouseClick("left", 442, (995 - $toSmallY), 2, 150)
 	Sleep(Random(111,294,1))
 
@@ -759,97 +666,6 @@ EndFunc
 
 local $moveCount = 0;
 
-;second panel F5
-Func MoveToPartymemberOne()
-
-   MischiefManaged()
-	MouseClick("left", 550, (940 - $toSmallY), 2, 200)
-	Sleep(Random(111,344,1))
-
-
-EndFunc
-
-Func TakeAssistFromPMOne()
-
-	MouseClick("right", 85, 303, 2, 300)
-	Sleep(Random(211,344,1))
-
-EndFunc
-
-Func TargetOnPMOne()
-
-	MouseClick("left", 85, 303, 2, 300)
-	Sleep(Random(211,344,1))
-
-EndFunc
-
-Func TakeAssistFromPMTwo()
-
-	MouseClick("right", 100, 352, 2, 200)
-	Sleep(Random(111,344,1))
-
-EndFunc
-
-Func TargetOnPMTwo()
-
-	MouseClick("left", 85, 352, 2, 300)
-	Sleep(Random(211,344,1))
-
-EndFunc
-
-Func TakeAssistFromPMThree()
-
-	MouseClick("right", 85, 390, 2, 300)
-	Sleep(Random(211,344,1))
-
-EndFunc
-
-Func TargetOnPMThree()
-
-	MouseClick("left", 85, 390, 2, 300)
-	Sleep(Random(211,344,1))
-
-EndFunc
-
-Func TakeAssistFromPMFour()
-
-	MouseClick("right", 85, 430, 2, 300)
-	Sleep(Random(211,344,1))
-
-EndFunc
-
-Func TargetOnPMFour()
-
-	MouseClick("left", 85, 430, 2, 300)
-	Sleep(Random(211,344,1))
-
-EndFunc
-
-Func TakeAssistFromPMFive()
-
-	MouseClick("right", 85, 470, 2, 300)
-	Sleep(Random(211,344,1))
-
-EndFunc
-
-Func TargetOnPMFive()
-
-	MouseClick("left", 85, 470, 2, 300)
-	Sleep(Random(211,344,1))
-
-EndFunc
-
-Func MischiefManaged()
-
-   If isAltTab() Then
-	  SuccessSound()
-	  ErrorSound()
-	  SuccessSound()
-	  Exit
-   EndIf
-
-EndFunc
-
 ;use healing pot on F4
 Func UseHealingPot()
 
@@ -863,7 +679,7 @@ Func UseHealingPot()
 	EndIf
 
 	$lastHealTime = TimerDiff($healTimer)
-	MischiefManaged()
+
 
 EndFunc
 
@@ -891,7 +707,7 @@ Func HealMyself()
 		MouseClick("left", 510, (995 - $toSmallY), 2, 150)
 
 		Sleep(Random(311,544,1))
-		MischiefManaged()
+
 
 	WEnd
 
@@ -903,7 +719,7 @@ Func HealMyself()
 
 	Sleep(Random(311,544,1))
 
-	MischiefManaged()
+
 
 EndFunc
 
@@ -990,9 +806,9 @@ Func BuffOrHeal()
 EndFunc
 
 
-Func exec()
+Func _HealMode()
 
-
+	SuccessSound()
 ;script budet ispolniatsa poka kolvo prohodov zika budet menshe
 While True
 
@@ -1066,10 +882,8 @@ While True
 
 	EndIf
 
-
-
 	Sleep(Random(511,944,1))
-	MischiefManaged()
+
 WEnd
 
 EndFunc
@@ -1089,7 +903,13 @@ StartSound()
 Sleep(Random(111,344,1))
 ;startALTTABProc()
 
-exec()
+While True
+
+	Sleep(100)
+
+WEnd
+
+
 Beep(700, 40)
 Beep(700, 40)
 Beep(700, 40)
