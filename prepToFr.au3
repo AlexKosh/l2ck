@@ -10,9 +10,9 @@
 SRandom(@MSEC)
 global const $LogFile = "debugtest.log"
 ;small = 265 / large = 1
-global const $toSmallY = 1
+global const $toSmallY = 265
 ;small = 275 / large 1
-global const $toSmallX = 1
+global const $toSmallX = 275
 
 global $targetDetected = False
 global $pmOneThreatened = False
@@ -30,9 +30,10 @@ global $AlacrityTimer = 0
 global $lastBuffTime = 1080001
 global $BuffTimer = 0
 
-HotKeySet("{F11}", "_PrepToDestr")
+HotKeySet("{F11}", "_Attack")
 HotKeySet("{F10}", "_Halt")
 HotKeySet("{F9}", "_FollowMe")
+HotKeySet("{F8}", "_PrepToDestr")
 
 global $isSSDOff = False
 
@@ -673,6 +674,36 @@ Func ALTTAB($q)
 	Sleep(Random(311,444,1))
 	Send("{ALTUP}")
 	Sleep(Random(511,644,1))
+
+EndFunc
+
+Func _Attack()
+
+	$isHalt = False
+
+	While $isHalt = False
+
+		TakeAssistFromPMOne()
+
+		If IsTargetExist() Then
+		   Beep(600, 50)
+		   Beep(500, 50)
+		   Beep(700, 50)
+			Attack()
+		 Else
+			Sleep(Random(151,244,1))
+			ContinueLoop
+		 EndIf
+
+		While IsTargetExist()
+			Sleep(50)
+			MischiefManaged()
+		WEnd
+
+		Sleep(Random(251,444,1))
+		MischiefManaged()
+	WEnd
+
 
 EndFunc
 
