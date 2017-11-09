@@ -159,7 +159,7 @@ Func IsPMTwoAttacked()
     const $MinNbPixel = 3
     const $OptNbPixel = 10
     const $PosX = 155
-    const $PosY = 300
+    const $PosY = 340
 
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
                          0x5E2936, 10)
@@ -225,7 +225,7 @@ Func IsPMFourAttacked()
     const $MinNbPixel = 3
     const $OptNbPixel = 10
     const $PosX = 155
-    const $PosY = 300
+    const $PosY = 430
 
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
                          0x5E2936, 10)
@@ -258,7 +258,7 @@ Func IsPMFourAttacked()
     const $MinNbPixel = 3
     const $OptNbPixel = 10
     const $PosX = 155
-    const $PosY = 300
+    const $PosY = 470
 
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
                          0x5E2936, 10)
@@ -291,7 +291,7 @@ Func IsPMFourAttacked()
     const $MinNbPixel = 3
     const $OptNbPixel = 10
     const $PosX = 110
-    const $PosY = 300
+    const $PosY = 240
 
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
                          0x5E2936, 10)
@@ -324,7 +324,7 @@ Func IsPMTwoHPBelow60()
     const $MinNbPixel = 3
     const $OptNbPixel = 10
     const $PosX = 110
-    const $PosY = 300
+    const $PosY = 340
 
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
                          0x5E2936, 10)
@@ -357,7 +357,7 @@ Func IsPMThreeHPBelow60()
     const $MinNbPixel = 3
     const $OptNbPixel = 10
     const $PosX = 110
-    const $PosY = 300
+    const $PosY = 390
 
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
                          0x5E2936, 10)
@@ -390,7 +390,7 @@ Func IsPMFourHPBelow60()
     const $MinNbPixel = 3
     const $OptNbPixel = 10
     const $PosX = 110
-    const $PosY = 300
+    const $PosY = 430
 
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
                          0x5E2936, 10)
@@ -423,7 +423,7 @@ Func IsPMFourHPBelow60()
     const $MinNbPixel = 3
     const $OptNbPixel = 10
     const $PosX = 110
-    const $PosY = 300
+    const $PosY = 470
 
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
                          0x5E2936, 10)
@@ -943,34 +943,6 @@ Func ALTTAB($q)
 EndFunc
 
 
-Func BuffOrHeal()
-
-	If	$lastWCHealTime > 14000 And (IsMyHPDamagedOver80() or IsPMOneOrTwoHPBelow90()) Then
-
-		$healWCTimer = TimerInit()
-
-		;F9
-		Heal()
-
-	EndIf
-
-	$lastWCHealTime = TimerDiff($healWCTimer)
-
-	If	$lastBuffTime > 1080000 Then
-
-		$BuffTimer = TimerInit()
-
-		;press F7 on second panels
-		MouseClick("left", 625, (940 - $toSmallY), 2, 200)
-		Sleep(Random(211,344,1))
-
-	EndIf
-
-	Sleep(Random(211,344,1))
-	$lastBuffTime = TimerDiff($BuffTimer)
-
-EndFunc
-
 Func _HealMode()
 
 	SuccessSound()
@@ -984,34 +956,6 @@ Func _HealMode()
 			TargetOnPMOne()
 
 			If	IsPMOneHPBelow60() Then
-
-				MajorHeal()
-
-			EndIf
-
-			GreaterHeal()
-
-		EndIf
-
-		If	IsPMTwoAttacked() Then
-
-			TargetOnPMTwo()
-
-			If	IsPMTwoHPBelow60() Then
-
-				MajorHeal()
-
-			EndIf
-
-			GreaterHeal()
-
-		EndIf
-
-		If	IsPMThreeAttacked() Then
-
-			TargetOnPMThree()
-
-			If	IsPMThreeHPBelow60() Then
 
 				MajorHeal()
 
@@ -1048,22 +992,6 @@ Func _FollowMe()
    ALTTAB(1)
    Sleep(Random(151,244,1))
    MoveToPartymemberOne()
-
-EndFunc
-
-Func _Halt()
-
-	$isHalt = True
-
-	Beep(600, 50)
-	Beep(500, 50)
-
-	While $isHalt = True
-
-		Sleep(Random(251,444,1))
-		MischiefManaged()
-
-	WEnd
 
 EndFunc
 

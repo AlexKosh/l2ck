@@ -1049,8 +1049,7 @@ Sleep(Random(1211,1944,1))
 StartSound()
 Sleep(Random(111,344,1))
 
-InviteWarc()
-;exec()
+exec()
 Beep(700, 40)
 
 ;SuccessSound()
