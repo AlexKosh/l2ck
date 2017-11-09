@@ -10,9 +10,9 @@
 SRandom(@MSEC)
 global const $LogFile = "debugtest.log"
 ;small = 265 / large = 1
-$toSmallY = 1
+$toSmallY = 265
 ;small = 275 / large 1
-$toSmallX = 1
+$toSmallX = 275
 
 global $targetDetected = False
 global $pmOneThreatened = False
@@ -759,6 +759,64 @@ Func _HealMode()
 			GreaterHeal()
 
 		EndIf
+
+		If	IsPMTwoAttacked() Then
+
+			TargetOnPMTwo()
+
+			If	IsPMTwoHPBelow60() Then
+
+				MajorHeal()
+
+			EndIf
+
+			GreaterHeal()
+
+		EndIf
+
+		If	IsPMThreeAttacked() Then
+
+			TargetOnPMThree()
+
+			If	IsPMThreeHPBelow60() Then
+
+				MajorHeal()
+
+			EndIf
+
+			GreaterHeal()
+
+		EndIf
+
+		If	IsPMFourAttacked() Then
+
+			TargetOnPMFour()
+
+			If	IsPMFourHPBelow60() Then
+
+				MajorHeal()
+
+			EndIf
+
+			GreaterHeal()
+
+		EndIf
+
+		If	IsPMFiveAttacked() Then
+
+			TargetOnPMFive()
+
+			If	IsPMFiveHPBelow60() Then
+
+				MajorHeal()
+
+			EndIf
+
+			GreaterHeal()
+
+		EndIf
+
+		Sleep(Random(251,344,1))
 
 	WEnd
 
