@@ -475,20 +475,7 @@ Func Attack()
 		HealAndBuffUsWarcIfYouCan()
 		;ChangeShadowWeapon()
 
-		;esli u PMThree HP ne max to proveriaem target s nego
-		If IsPMThreeAttacked() Then
-
-			;proveriaem ne sagrilsia li mob na party member one
-			TakeAssistFromPMThree()
-			If IsTargetExist() Then
-				$targetDetected = True
-				MouseClick("left", 434, (995 - $toSmallY), 2, 150)
-				HealAndBuffUsWarcIfYouCan()
-				Sleep(Random(550,995,1))
-				ContinueLoop
-			EndIf
-		EndIf
-
+		;BD
 		;esli u PMFive HP ne max to proveriaem target s nego
 		If IsPMFiveAttacked() Then
 
@@ -502,7 +489,7 @@ Func Attack()
 				ContinueLoop
 			EndIf
 		EndIf
-
+		;SVS
 		;esli u PMFour HP ne max to proveriaem target s nego
 		If IsPMFourAttacked() Then
 
@@ -516,7 +503,7 @@ Func Attack()
 				ContinueLoop
 			EndIf
 		EndIf
-
+		;Heal
 		;esli u PMOne HP ne max to proveriaem target s nego
 		If IsPMOneAttacked() Then
 
@@ -530,7 +517,7 @@ Func Attack()
 				ContinueLoop
 			EndIf
 		EndIf
-
+		;Warc
 		;esli u PMTwo HP ne max to proveriaem target s nego
 		If IsPMTwoAttacked() Then
 
@@ -539,6 +526,20 @@ Func Attack()
 			If IsTargetExist() Then
 				$targetDetected = True
 				MouseClick("left", 392, (995 - $toSmallY), 2, 150)
+				HealAndBuffUsWarcIfYouCan()
+				Sleep(Random(550,995,1))
+				ContinueLoop
+			EndIf
+		EndIf
+		;CJ
+		;esli u PMThree HP ne max to proveriaem target s nego
+		If IsPMThreeAttacked() Then
+
+			;proveriaem ne sagrilsia li mob na party member one
+			TakeAssistFromPMThree()
+			If IsTargetExist() Then
+				$targetDetected = True
+				MouseClick("left", 434, (995 - $toSmallY), 2, 150)
 				HealAndBuffUsWarcIfYouCan()
 				Sleep(Random(550,995,1))
 				ContinueLoop
@@ -1165,7 +1166,7 @@ EndFunc
 
 Func HealAndBuffUsWarcIfYouCan()
 
-	If	($lastWCHealTime > 14000 And (IsMyHPDamagedOver80() or IsPMOneOrTwoHPBelow90()) Or IsPMTwoAttacked()) Or $lastBuffTime > 1080000 Then
+	If	($lastWCHealTime > 14000 And (IsMyHPDamagedOver80() Or IsPMOneAttacked())) Or $lastBuffTime > 1080000 Then
 
 		ALTTAB(1)
 
@@ -1228,9 +1229,10 @@ EndFunc
 
 Func BuffOrHeal()
 
-	If	($lastWCHealTime > 14000 And  $lastBuffTime > 16000) And (IsMyHPDamagedOver80() or IsPMOneOrTwoHPBelow90() or IsPMTwoAttacked()) Then
+	If	($lastWCHealTime > 14000 And  $lastBuffTime > 16000) And (IsMyHPDamagedOver80() or IsPMOneAttacked()) Then
 
 		$healWCTimer = TimerInit()
+		Sleep(Random(111,244,1))
 
 		;F9
 		Heal()
