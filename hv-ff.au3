@@ -10,9 +10,9 @@
 SRandom(@MSEC)
 global const $LogFile = "debugtest.log"
 ;small = 265 / large = 1
-$toSmallY = 1
+$toSmallY = 265
 ;small = 275 / large 1
-$toSmallX = 1
+$toSmallX = 275
 
 global $targetDetected = False
 global $pmOneThreatened = False
@@ -77,336 +77,6 @@ EndFunc
 
 func LogWrite($data)
     FileWrite($LogFile, $data & chr(10))
-endfunc
-
-Func IsPMOneAttacked()
-    const $SizeSearch = 40
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 155
-    const $PosY = 300
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0x5E2936, 10)
-
-    const $MaxX = 330
-    const $MinX = 15
-    const $MaxY = 320
-	const $MinY = 260
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
-endfunc
-
-Func IsPMTwoAttacked()
-    const $SizeSearch = 40
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 155
-    const $PosY = 300
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0x5E2936, 10)
-
-    const $MaxX = 330
-    const $MinX = 15
-    const $MaxY = 360
-	const $MinY = 320
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
-endfunc
-
-Func IsPMThreeAttacked()
-    const $SizeSearch = 40
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 155
-    const $PosY = 300
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0x5E2936, 10)
-
-    const $MaxX = 330
-    const $MinX = 15
-    const $MaxY = 410
-	const $MinY = 370
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
-endfunc
-
-Func IsPMFourAttacked()
-    const $SizeSearch = 40
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 155
-    const $PosY = 300
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0x5E2936, 10)
-
-    const $MaxX = 330
-    const $MinX = 15
-    const $MaxY = 450
-	const $MinY = 410
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
- endfunc
-
- Func IsPMFiveAttacked()
-    const $SizeSearch = 40
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 155
-    const $PosY = 300
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0x5E2936, 10)
-
-    const $MaxX = 330
-    const $MinX = 15
-    const $MaxY = 490
-	const $MinY = 460
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
- endfunc
-
- Func IsPMOneHPBelow60()
-    const $SizeSearch = 40
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 110
-    const $PosY = 300
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0x5E2936, 10)
-
-    const $MaxX = 125
-    const $MinX = 15
-    const $MaxY = 320
-	const $MinY = 260
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
-endfunc
-
-Func IsPMTwoHPBelow60()
-    const $SizeSearch = 40
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 110
-    const $PosY = 300
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0x5E2936, 10)
-
-    const $MaxX = 125
-    const $MinX = 15
-    const $MaxY = 360
-	const $MinY = 320
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
-endfunc
-
-Func IsPMThreeHPBelow60()
-    const $SizeSearch = 40
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 110
-    const $PosY = 300
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0x5E2936, 10)
-
-    const $MaxX = 125
-    const $MinX = 15
-    const $MaxY = 410
-	const $MinY = 370
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
-endfunc
-
-Func IsPMFourHPBelow60()
-    const $SizeSearch = 40
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 110
-    const $PosY = 300
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0x5E2936, 10)
-
-    const $MaxX = 125
-    const $MinX = 15
-    const $MaxY = 450
-	const $MinY = 410
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
- endfunc
-
- Func IsPMFiveHPBelow60()
-    const $SizeSearch = 40
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 110
-    const $PosY = 300
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0x5E2936, 10)
-
-    const $MaxX = 125
-    const $MinX = 15
-    const $MaxY = 490
-	const $MinY = 460
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
 endfunc
 
 Func IsMyHPDamagedOver45()
@@ -574,6 +244,38 @@ Func IsMyMPUpper30()
     endif
 endfunc
 
+Func IsPMThreeMPBelow60()
+    const $SizeSearch = 40
+    const $MinNbPixel = 2
+    const $OptNbPixel = 6
+    const $PosX = 110
+    const $PosY = 390
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x213F5B, 10)
+
+    const $MaxX = 145
+    const $MinX = 15
+    const $MaxY = 410
+	const $MinY = 370
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+endfunc
 
 Func IsDialogBoxAppear()
     const $SizeSearch = 40
@@ -640,6 +342,15 @@ Func PickUp()
 
 EndFunc
 
+;F8
+Func Recharge()
+
+
+	MouseClick("left", 667, (995 - $toSmallY), 2, 300)
+	Sleep(Random(111,294,1))
+
+EndFunc
+
 ;F4
 Func MajorHeal()
 
@@ -690,6 +401,7 @@ Func HealMyself()
 	If IsMyHPDamaged() Then
 
 		Beep(600, 50)
+		Sleep(222)
 		Beep(600, 50)
 	;F9
 	Heal();
@@ -881,6 +593,16 @@ While True
 	   Sleep(Random(311,644,1))
 
 	EndIf
+
+	If IsPMThreeMPBelow60() and IsMyMPUpper30() Then
+
+		TargetOnPMThree()
+		Recharge()
+		ClearTarget()
+	   Sleep(Random(311,644,1))
+
+	EndIf
+
 
 	Sleep(Random(511,944,1))
 
