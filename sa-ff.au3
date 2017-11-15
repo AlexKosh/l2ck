@@ -67,9 +67,6 @@ Func _FollowMe()
 
    SuccessSound()
    MoveToPartymemberOne()
-   ALTTAB(1)
-   Sleep(Random(151,244,1))
-   MoveToPartymemberOne()
 
 EndFunc
 
@@ -362,7 +359,6 @@ EndFunc
 
 Func Attack()
 
-
 	MouseClick("left", 434, (995 - $toSmallY), 2, 300)
 	Sleep(Random(211, 394,1))
 
@@ -371,6 +367,10 @@ Func Attack()
 	;
 
 	While IsTargetExist()
+
+	   If isTargetNotMe() Then
+		  ClearTarget()
+	  EndIf
 
 
 		HealMeIfYouCan()
@@ -384,7 +384,7 @@ Func Attack()
 			TakeAssistFromPMTwo()
 			If IsTargetExist() Then
 				$targetDetected = True
-				Attack()
+				MouseClick("left", 434, (995 - $toSmallY), 2, 300)
 			EndIf
 		EndIf
 
@@ -399,7 +399,7 @@ Func Attack()
 		EndIf
 
 		;spoil F2
-		If Random(1, 100) > 95 Then
+		If Random(1, 100) > 96 Then
 			MouseClick("left", 434, (995 - $toSmallY), 2, 300)
 			Sleep(Random(550,995,1))
 			ContinueLoop;
@@ -420,7 +420,14 @@ EndFunc
 
 Func ClearTarget()
 
-	MouseClick("left", 562, 44, 2, 200)
+   Send("{SHIFTDOWN}")
+
+	MouseClick("left", 601, 44, 1, 200)
+	Sleep(Random(211, 311,1))
+
+	Send("{SHIFTUP}")
+
+	Sleep(Random(211, 311,1))
 
 EndFunc
 
@@ -463,6 +470,17 @@ Func SelectTarget()
 
 	HealMeIfYouCan()
 	DanceAndSong()
+
+	If IsPMTwoAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMTwo()
+		If IsTargetExist() Then
+			$targetDetected = True
+			Attack()
+			Return
+		EndIf
+	EndIf
 
 	;
 	Sleep(Random(90,120,1))
@@ -631,6 +649,7 @@ local $index = 2
 EndFunc
 
 Func _SpoilAndDance()
+   $lastBuffTime = 750001
 
 	SuccessSound()
 
