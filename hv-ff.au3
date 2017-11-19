@@ -50,6 +50,10 @@ HotKeySet("{F10}", "_Halt")
 HotKeySet("{F9}", "_FollowMe")
 HotKeySet("!{Esc}", "_Terminate")
 
+HotKeySet("^{1}", "_RechargeFirst")
+HotKeySet("^{2}", "_RechargeSecond")
+HotKeySet("^{3}", "_RechargeThird")
+
 Func _Halt()
 
 	$isHalt = True
@@ -244,6 +248,39 @@ Func IsMyMPUpper30()
     endif
 endfunc
 
+Func IsMyMPBelow30()
+
+    const $SizeSearch = 80
+    const $MinNbPixel = 3
+    const $OptNbPixel = 10
+    const $PosX = 50
+    const $PosY = 70
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x005DB8, 10)
+
+    const $MaxX = 75
+    const $MinX = 25
+    const $MaxY = 100
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+endfunc
+
 Func IsPMThreeMPBelow60()
     const $SizeSearch = 40
     const $MinNbPixel = 2
@@ -347,6 +384,15 @@ Func Recharge()
 
 
 	MouseClick("left", 667, (995 - $toSmallY), 2, 300)
+	Sleep(Random(111,294,1))
+
+EndFunc
+
+;Third's panel F1
+Func RechargeCraft()
+
+
+	MouseClick("left", 400, (900 - $toSmallY), 2, 300)
 	Sleep(Random(111,294,1))
 
 EndFunc
@@ -517,6 +563,24 @@ Func BuffOrHeal()
 
 EndFunc
 
+Func RestForMPRegen()
+
+	StartSound()
+
+	If	IsMyMPBelow30() = False Then
+		StartSound()
+		StartSound()
+
+		;F11 - sit
+		MouseClick("left", 777, (995 - $toSmallY), 2, 300)
+		Sleep(Random(211,344,1))
+		Sleep(120000)
+		;F11 - sit
+		MouseClick("left", 777, (995 - $toSmallY), 2, 300)
+		Sleep(Random(211,344,1))
+	EndIf
+
+EndFunc
 
 Func _HealMode()
 
@@ -593,7 +657,7 @@ While True
 	   Sleep(Random(311,644,1))
 
 	EndIf
-
+	;pm3 must be a spoiler
 	If IsPMThreeMPBelow60() and IsMyMPUpper30() Then
 
 		TargetOnPMThree()
@@ -610,7 +674,70 @@ WEnd
 
 EndFunc
 
+Func _RechargeFirst()
 
+	SuccessSound()
+
+	$isHalt = False
+
+	TargetOnPMOne()
+
+	While $isHalt = False
+
+		RechargeCraft()
+
+		Sleep(Random(4000,4545,1))
+
+		RestForMPRegen()
+		Sleep(Random(40000,45545,1))
+
+	WEnd
+
+EndFunc
+
+Func _RechargeSecond()
+
+	SuccessSound()
+
+	$isHalt = False
+
+	TargetOnPMTwo()
+
+	While $isHalt = False
+
+		RechargeCraft()
+
+		Sleep(Random(4000,4545,1))
+
+		RestForMPRegen()
+
+		Sleep(Random(40000,45545,1))
+
+	WEnd
+
+EndFunc
+
+Func _RechargeThird()
+
+	SuccessSound()
+
+	$isHalt = False
+
+	TargetOnPMThree()
+
+	While $isHalt = False
+
+		RechargeCraft()
+
+		Sleep(Random(4000,4545,1))
+
+		RestForMPRegen()
+
+		Sleep(Random(40000,45545,1))
+
+	WEnd
+
+EndFunc
 ;==============================================================================================
 ;======================================== execution ===========================================
 ;==============================================================================================
@@ -627,7 +754,7 @@ Sleep(Random(111,344,1))
 
 While True
 
-	Sleep(100)
+	Sleep(1000)
 
 WEnd
 
