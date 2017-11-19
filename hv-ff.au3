@@ -10,9 +10,11 @@
 SRandom(@MSEC)
 global const $LogFile = "debugtest.log"
 ;small = 265 / large = 1
-$toSmallY = 265
+$toSmallY = 300
 ;small = 275 / large 1
 $toSmallX = 275
+
+global $windowsCount = 3
 
 global $targetDetected = False
 global $pmOneThreatened = False
@@ -677,19 +679,43 @@ EndFunc
 Func _RechargeFirst()
 
 	SuccessSound()
-
 	$isHalt = False
 
-	TargetOnPMOne()
+	local $index = 0
 
 	While $isHalt = False
+		$index = 0
 
-		RechargeCraft()
+		While $windowsCount - $index > 0
 
-		Sleep(Random(4000,4545,1))
+			TargetOnPMOne()
 
-		RestForMPRegen()
-		Sleep(Random(40000,45545,1))
+			RechargeCraft()
+
+			$index += 1
+
+			If $windowsCount > 1 Then
+
+				ALTTAB($windowsCount - 1)
+				TargetOnPMOne()
+				RechargeCraft()
+				$index += 1
+
+				If	$windowsCount > 2 Then
+
+					ALTTAB($windowsCount - 1)
+					TargetOnPMOne()
+					RechargeCraft()
+					$index += 1
+
+				EndIf
+
+			EndIf
+
+
+		WEnd
+
+		Sleep(Random(75000,80545,1))
 
 	WEnd
 
