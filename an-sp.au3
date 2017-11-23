@@ -34,26 +34,17 @@ global $secondSWChanged = False
 global $lastBuffTime = 1140001
 global $BuffTimer = 0
 
+global $warcWOParty = True
+
+global $safePartyDismiss = 0
+global $safePDTimer = 0
+
+global $warcInParty = False
+
 HotKeySet("^{9}", "_SpoilMode")
 HotKeySet("^{0}", "_Halt")
 HotKeySet("^{8}", "_FollowMe")
 HotKeySet("!{Esc}", "_Terminate")
-
-Func InviteWarc()
-
-	;every 19 minutes uses alacrity potion on second panel F7
-	If	$lastBuffTime > 1100000 Then
-
-		$BuffTimer = TimerInit()
-
-		MouseClick("left", 590, (940 - $toSmallY), 2, 200)
-		Sleep(Random(111,344,1))
-
-	EndIf
-
-	$lastBuffTime = TimerDiff($BuffTimer)
-
-EndFunc
 
 
 Func CalculateStunChance()
@@ -93,8 +84,9 @@ Func Attack()
 
 		HealMeIfYouCan()
 		ChangeShadowWeapon()
-		NeedSomeAlacrity()
+		;NeedSomeAlacrity()
 		BuffUsWarcIfYouCan()
+		DismissWCFromParty()
 
 		;esli u PMOne HP ne max to proveriaem target s nego
 		If IsPMOneAttacked() Then
@@ -569,21 +561,45 @@ Func BuffUsWarcIfYouCan()
 
 	If	$lastBuffTime > 860000 Then
 
-		ALTTAB(1)
+		If $warcWOParty Then
 
-		Sleep(1500)
+			InviteWarc()
 
-		$BuffTimer = TimerInit()
+			ALTTAB(1)
 
-		;press F7 on second panels
-		MouseClick("left", 625, (940 - $toSmallY), 2, 200)
-		Sleep(Random(211,344,1))
+			AcceptInvite()
 
-		ALTTAB(1)
+			$BuffTimer = TimerInit()
+			$safePDTimer = TimerInit()
+
+			;press F7 on second panels
+			MouseClick("left", 625, (940 - $toSmallY), 2, 200)
+			Sleep(Random(211,344,1))
+
+			ALTTAB(1)
+
+		Else
+
+			ALTTAB(1)
+
+			Sleep(1500)
+
+			$BuffTimer = TimerInit()
+
+			;press F7 on second panels
+			MouseClick("left", 625, (940 - $toSmallY), 2, 200)
+			Sleep(Random(211,344,1))
+
+			ALTTAB(1)
+
+		EndIf
+
+
 
 	EndIf
 
 	$lastBuffTime = TimerDiff($BuffTimer)
+	$safePartyDismiss = TimerDiff($safePDTimer)
 
 EndFunc
 
@@ -624,6 +640,64 @@ Func exec()
 	WEnd
 
 EndFunc
+
+
+Func InviteWarc()
+
+	Sleep(Random(211,344,1))
+
+	If	$warcInParty = False Then
+
+		;press F6 on second panels to Invite Warc
+		MouseClick("left", 590, (940 - $toSmallY), 2, 200)
+		Sleep(Random(411,644,1))
+
+	EndIf
+
+
+
+EndFunc
+
+Func AcceptInvite()
+
+	While $warcInParty = False
+
+		If	IsDialogBoxAppear() then
+
+			;press OK on dialog window btn
+			MouseClick("left", 466, (1020 - $toSmallY), 1, 200)
+			Sleep(Random(200, 400, 1))
+			$warcInParty = True
+			$safePDTimer = TimerInit()
+
+			ExitLoop
+		EndIf
+
+		Sleep(333)
+
+	WEnd
+
+EndFunc
+
+Func DismissWCFromParty()
+
+
+	Sleep(Random(531,744,1))
+
+	If $safePartyDismiss > 46000 And $warcInParty = True Then
+
+		;press leave party on F12 third panels
+		MouseClick("left", 822, (890 - $toSmallY), 2, 200)
+		$safePDTimer = TimerInit()
+		$warcInParty = False
+		Sleep(Random(211,344,1))
+
+	EndIf
+
+	$safePartyDismiss = TimerDiff($safePDTimer)
+
+EndFunc
+
 
 
 Func _SpoilMode()
