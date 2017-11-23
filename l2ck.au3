@@ -14,6 +14,11 @@ Global $toSmallX = 1
 
 SRandom(@MSEC)
 
+global $LogFile = "debug_c3-sp.log"
+
+global $firstSWChanged = False
+global $secondSWChanged = False
+
 Func ErrorSound()
 	Beep(1200, 100)
 	Beep(900, 100)
@@ -29,6 +34,32 @@ Func StartSound()
 	Beep(300, 100)
 EndFunc
 
+Func LogWrite($data)
+    FileWrite($LogFile, $data & chr(10))
+Endfunc
+
+Func _FollowMe()
+
+   SuccessSound()
+   MoveToPartymemberOne()
+
+EndFunc
+
+Func _Halt()
+
+	$isHalt = True
+
+	Beep(600, 50)
+	Beep(500, 50)
+
+	While $isHalt = True
+
+		Sleep(Random(251,444,1))
+
+	WEnd
+
+EndFunc
+
 Func _Terminate()
 
 	Beep(600, 400)
@@ -40,6 +71,25 @@ Func _Terminate()
 
 EndFunc
 
+Func ALTTAB($q)
+
+	Sleep(Random(251,444,1))
+	Send("{ALTDOWN}")
+
+	While $q > 0
+
+		Sleep(Random(151,314,1))
+		Send("{TAB}")
+
+		$q -= 1
+
+	WEnd
+
+	Sleep(Random(311,444,1))
+	Send("{ALTUP}")
+	Sleep(Random(511,644,1))
+
+EndFunc
 ;proveriaet nalichie pixela krasnogo zveta kak hp v oblasti gde target
 ;true if >1hp na target, false if targeta net ili u targeta net hp ili hp polosi
 Func IsTargetExist()
@@ -106,7 +156,285 @@ Func IsTargetNotMe()
     endif
  endfunc
 
-;===============DESTROPREP====================
+;===============CHARACTER=====================
+
+Func IsMyHPDamagedOver45()
+
+    const $SizeSearch = 80
+    const $MinNbPixel = 3
+    const $OptNbPixel = 10
+    const $PosX = 50
+    const $PosY = 75
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x421010, 10)
+
+    const $MaxX = 93
+    const $MinX = 5
+    const $MaxY = 100
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+endfunc
+
+Func IsMyHPDamagedOver60()
+
+    const $SizeSearch = 80
+    const $MinNbPixel = 3
+    const $OptNbPixel = 10
+    const $PosX = 50
+    const $PosY = 75
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x421010, 10)
+
+    const $MaxX = 108
+    const $MinX = 5
+    const $MaxY = 100
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+endfunc
+
+Func IsMyHPDamagedOver80()
+
+    const $SizeSearch = 80
+    const $MinNbPixel = 3
+    const $OptNbPixel = 10
+    const $PosX = 50
+    const $PosY = 75
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x421010, 10)
+
+    const $MaxX = 130
+    const $MinX = 5
+    const $MaxY = 100
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+endfunc
+
+Func IsMyMPUpper30()
+
+    const $SizeSearch = 80
+    const $MinNbPixel = 3
+    const $OptNbPixel = 10
+    const $PosX = 120
+    const $PosY = 70
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x005DB8, 10)
+
+    const $MaxX = 160
+    const $MinX = 75
+    const $MaxY = 100
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+endfunc
+
+
+;---------------------------------------------
+
+Func IsShadowWeaponReadyOne()
+    const $SizeSearch = 40
+    const $MinNbPixel = 2
+    const $OptNbPixel = 5
+    const $PosX = 400
+    const $PosY = (900 - $toSmallY)
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x949A73, 10)
+
+    const $MaxX = 415
+    const $MinX = 385
+    const $MaxY = (905 - $toSmallY)
+	const $MinY = (875 - $toSmallY)
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY and $MinY < $coords[1] then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+ endfunc
+
+Func IsShadowWeaponReadyTwo()
+    const $SizeSearch = 40
+    const $MinNbPixel = 2
+    const $OptNbPixel = 5
+    const $PosX = 435
+    const $PosY = (900 - $toSmallY)
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x949A73, 10)
+
+    const $MaxX = 451
+    const $MinX = 420
+    const $MaxY = (905 - $toSmallY)
+	const $MinY = (875 - $toSmallY)
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY and $MinY < $coords[1] then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+endfunc
+
+Func IsDialogBoxAppear()
+    const $SizeSearch = 40
+    const $MinNbPixel = 3
+    const $OptNbPixel = 10
+    const $PosX = 466
+    const $PosY = (1020 - $toSmallY)
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0xE6D9BE, 10)
+
+    const $MaxX = 470
+    const $MinX = 450
+    const $MaxY = (1040 - $toSmallY)
+	const $MinY = (1000 - $toSmallY)
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+ endfunc
+
+Func ChangeShadowWeapon()
+
+	If IsShadowWeaponReadyOne() = False Then
+
+	If IsShadowWeaponReadyTwo() = False And $secondSWChanged = False Then
+
+		Beep(500, 400)
+		Beep(600, 400)
+		Beep(400, 400)
+
+		MouseClick("left", (960 - $toSmallX), (635 - $toSmallY), 1, 200)
+		Sleep(Random(911,1444,1))
+
+
+		MouseClick("left", 475, (890 - $toSmallY), 1, 200)
+		Sleep(Random(211,444,1))
+		$secondSWChanged = True
+
+		Return
+	EndIf
+
+	Sleep(Random(211,444,1))
+
+	If $firstSWChanged = False Then
+		Beep(400, 400)
+		Beep(500, 400)
+		Beep(600, 400)
+
+		MouseClick("left", (960 - $toSmallX), (635 - $toSmallY), 1, 200)
+		Sleep(Random(911,1444,1))
+
+		MouseClick("left", 435, (890 - $toSmallY), 1, 200)
+		$firstSWChanged = True
+		Sleep(Random(211,444,1))
+	EndIf
+
+	EndIf
+
+EndFunc
+
+
+
+;===============DESTROER======================
 
 Func IsPMTwoHPBelow30()
     const $SizeSearch = 40
@@ -240,7 +568,7 @@ Func IsPMFiveHPBelow30()
     endif
  endfunc
 
-;============================================
+;---------------------------------------------
 
 Func IsPMTwoHPBelow40()
     const $SizeSearch = 40
@@ -541,7 +869,7 @@ Func IsPMFourHPBelow60()
     endif
 endfunc
 
-;============================================
+;-------------------------------------------
 
 Func IsPMOneAttacked()
     const $SizeSearch = 40
@@ -791,6 +1119,40 @@ Func Alert()
 
 EndFunc
 
+Func IsPMOneOrTwoHPBelow90()
+    const $SizeSearch = 40
+    const $MinNbPixel = 3
+    const $OptNbPixel = 10
+    const $PosX = 110
+    const $PosY = 300
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x5E2936, 10)
+
+    const $MaxX = 150
+    const $MinX = 15
+    const $MaxY = 360
+	const $MinY = 280
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+ endfunc
+
+
 ;second panel F5
 Func MoveToPartymemberOne()
 
@@ -867,5 +1229,53 @@ Func TargetOnPMFive()
 
 	MouseClick("left", 85, 470, 2, 300)
 	Sleep(Random(211,344,1))
+
+EndFunc
+
+
+;=================MOVEMENTS===================
+
+Func MakeCameraVerticalAgain()
+
+	If $toSmallY = 1 or $toSmallX = 1 Then
+		;large
+		MouseClickDrag ( "right", 950, 420, 950, 550, 200)
+
+	Else
+		;small
+		MouseClickDrag ( "right", 680, 300, 680, 430, 200)
+
+	EndIf
+
+	Sleep(Random(111,344,1))
+
+EndFunc
+
+Func MoveLeftUp()
+
+	MouseClick("left", (500 - $toSmallX), (250 - ($toSmallY /2)), 1, 200)
+	Sleep(Random(111,344,1))
+
+EndFunc
+
+Func MoveRightUp()
+
+	MouseClick("left", (1550 - ($toSmallX *2)), (250 - ($toSmallY /2)), 1, 200)
+	Sleep(Random(111,344,1))
+
+EndFunc
+
+Func MoveRightDown()
+
+	MouseClick("left", (1550 - ($toSmallX *2)) , (840 - $toSmallY), 1, 200)
+	Sleep(Random(111,344,1))
+
+EndFunc
+
+Func MoveLeftDown()
+
+	;MouseClick("left", 500, 840, 1, 200)
+	MouseClick("left", (500 - $toSmallX), (840 - $toSmallY), 1, 200)
+	Sleep(Random(111,344,1))
 
 EndFunc
