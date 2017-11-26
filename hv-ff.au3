@@ -7,10 +7,9 @@
 #include <MsgBoxConstants.au3>
 #RequireAdmin
 
-SRandom(@MSEC)
-global const $LogFile = "debugtest.log"
+$LogFile = "debugtest.log"
 ;small = 265 / large = 1
-$toSmallY = 300
+$toSmallY = 265
 ;small = 275 / large 1
 $toSmallX = 275
 
@@ -52,203 +51,12 @@ HotKeySet("{F10}", "_Halt")
 HotKeySet("{F9}", "_FollowMe")
 HotKeySet("!{Esc}", "_Terminate")
 
+HotKeySet("^{6}", "_RechargeTarget")
+
 HotKeySet("^{1}", "_RechargeFirst")
 HotKeySet("^{2}", "_RechargeSecond")
 HotKeySet("^{3}", "_RechargeThird")
-
-Func _Halt()
-
-	$isHalt = True
-
-	Beep(600, 50)
-	Beep(500, 50)
-
-	While $isHalt = True
-
-		Sleep(Random(251,444,1))
-
-	WEnd
-
-EndFunc
-
-Func _FollowMe()
-
-   SuccessSound()
-   MoveToPartymemberOne()
-   ALTTAB(1)
-   Sleep(Random(151,244,1))
-   MoveToPartymemberOne()
-
-EndFunc
-
-func LogWrite($data)
-    FileWrite($LogFile, $data & chr(10))
-endfunc
-
-Func IsMyHPDamagedOver45()
-
-    const $SizeSearch = 80
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 50
-    const $PosY = 75
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0x421010, 10)
-
-    const $MaxX = 85
-    const $MinX = 5
-    const $MaxY = 100
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
-endfunc
-
-Func IsMyHPDamagedOver60()
-
-    const $SizeSearch = 80
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 50
-    const $PosY = 75
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0x421010, 10)
-
-    const $MaxX = 108
-    const $MinX = 5
-    const $MaxY = 100
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
-endfunc
-
-Func IsMyHPDamagedOver80()
-
-    const $SizeSearch = 80
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 50
-    const $PosY = 75
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0x421010, 10)
-
-    const $MaxX = 130
-    const $MinX = 5
-    const $MaxY = 100
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
-endfunc
-
-Func IsPMOneOrTwoHPBelow90()
-    const $SizeSearch = 40
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 110
-    const $PosY = 300
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0x5E2936, 10)
-
-    const $MaxX = 153
-    const $MinX = 15
-    const $MaxY = 490
-	const $MinY = 280
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
- endfunc
-
-Func IsMyMPUpper30()
-
-    const $SizeSearch = 80
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 120
-    const $PosY = 70
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0x005DB8, 10)
-
-    const $MaxX = 160
-    const $MinX = 75
-    const $MaxY = 100
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
-endfunc
+HotKeySet("^{4}", "_RechargeFour")
 
 Func IsMyMPBelow30()
 
@@ -259,14 +67,47 @@ Func IsMyMPBelow30()
     const $PosY = 70
 
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0x005DB8, 10)
+                         0x004DBD, 10)
 
-    const $MaxX = 75
+    const $MaxX = 90
     const $MinX = 25
     const $MaxY = 100
 
     if not @error then
         if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+endfunc
+
+Func IsPMTwoMPBelow60()
+    const $SizeSearch = 40
+    const $MinNbPixel = 2
+    const $OptNbPixel = 6
+    const $PosX = 48
+    const $PosY = 390
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x213F5B, 10)
+
+    const $MaxX = 145
+    const $MinX = 15
+    const $MaxY = 360
+	const $MinY = 320
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
             LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
                      ", " & $coords[1] & " pixels = " & $coords[2])
 					 ;SuccessSound()
@@ -315,40 +156,6 @@ Func IsPMThreeMPBelow60()
         return False
     endif
 endfunc
-
-Func IsDialogBoxAppear()
-    const $SizeSearch = 40
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 466
-    const $PosY = (1020 - $toSmallY)
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0xE6D9BE, 10)
-
-    const $MaxX = 470
-    const $MinX = 450
-    const $MaxY = (1040 - $toSmallY)
-	const $MinY = (1000 - $toSmallY)
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
- endfunc
-
 
 Func ClearTarget()
 
@@ -516,26 +323,6 @@ Func startALTTABProc()
 
 EndFunc
 
-Func ALTTAB($q)
-
-	Sleep(Random(251,444,1))
-	Send("{ALTDOWN}")
-
-	While $q > 0
-
-		Sleep(Random(151,314,1))
-		Send("{TAB}")
-
-		$q -= 1
-
-	WEnd
-
-	Sleep(Random(311,444,1))
-	Send("{ALTUP}")
-	Sleep(Random(511,644,1))
-
-EndFunc
-
 
 Func BuffOrHeal()
 
@@ -565,6 +352,8 @@ Func BuffOrHeal()
 
 EndFunc
 
+;section for craft
+
 Func RestForMPRegen()
 
 	StartSound()
@@ -576,10 +365,39 @@ Func RestForMPRegen()
 		;F11 - sit
 		MouseClick("left", 777, (995 - $toSmallY), 2, 300)
 		Sleep(Random(211,344,1))
-		Sleep(120000)
+
+		If $windowsCount > 1 Then
+		   ALTTAB($windowsCount - 1)
+		   MouseClick("left", 777, (995 - $toSmallY), 2, 300)
+		   Sleep(Random(211,344,1))
+
+		   If $windowsCount > 2 Then
+			  ALTTAB($windowsCount - 1)
+			  MouseClick("left", 777, (995 - $toSmallY), 2, 300)
+			  Sleep(Random(211,344,1))
+		   EndIf
+
+		EndIf
+
+
+		Sleep(160000)
 		;F11 - sit
 		MouseClick("left", 777, (995 - $toSmallY), 2, 300)
 		Sleep(Random(211,344,1))
+
+		If $windowsCount > 1 Then
+		   ALTTAB($windowsCount - 1)
+		   MouseClick("left", 777, (995 - $toSmallY), 2, 300)
+		   Sleep(Random(211,344,1))
+
+		   If $windowsCount > 2 Then
+			  ALTTAB($windowsCount - 1)
+			  MouseClick("left", 777, (995 - $toSmallY), 2, 300)
+			  Sleep(Random(211,344,1))
+		   EndIf
+
+		EndIf
+
 	EndIf
 
 EndFunc
@@ -676,6 +494,49 @@ WEnd
 
 EndFunc
 
+Func _RechargeTarget()
+
+	SuccessSound()
+	$isHalt = False
+
+	local $index = 0
+
+	While $isHalt = False
+		$index = 0
+
+		While $windowsCount - $index > 0
+
+			RechargeCraft()
+
+			$index += 1
+
+			If $windowsCount > 1 Then
+
+				ALTTAB($windowsCount - 1)
+				RechargeCraft()
+				$index += 1
+
+				If	$windowsCount > 2 Then
+
+					ALTTAB($windowsCount - 1)
+					RechargeCraft()
+					$index += 1
+
+				EndIf
+
+			EndIf
+
+
+		WEnd
+
+		Sleep(Random(4000,4545,1))
+		;RestForMPRegen()
+		Sleep(Random(80000,85545,1))
+
+	WEnd
+
+EndFunc
+
 Func _RechargeFirst()
 
 	SuccessSound()
@@ -715,7 +576,9 @@ Func _RechargeFirst()
 
 		WEnd
 
-		Sleep(Random(75000,80545,1))
+		Sleep(Random(4000,4545,1))
+		;RestForMPRegen()
+		Sleep(Random(80000,85545,1))
 
 	WEnd
 
@@ -724,23 +587,47 @@ EndFunc
 Func _RechargeSecond()
 
 	SuccessSound()
-
 	$isHalt = False
 
-	TargetOnPMTwo()
+	local $index = 0
 
 	While $isHalt = False
+		$index = 0
 
-		RechargeCraft()
+		While $windowsCount - $index > 0
+
+			TargetOnPMTwo()
+
+			RechargeCraft()
+
+			$index += 1
+
+			If $windowsCount > 1 Then
+
+				ALTTAB($windowsCount - 1)
+				TargetOnPMTwo()
+				RechargeCraft()
+				$index += 1
+
+				If	$windowsCount > 2 Then
+
+					ALTTAB($windowsCount - 1)
+					TargetOnPMTwo()
+					RechargeCraft()
+					$index += 1
+
+				EndIf
+
+			EndIf
+
+
+		WEnd
 
 		Sleep(Random(4000,4545,1))
-
-		RestForMPRegen()
-
-		Sleep(Random(40000,45545,1))
+		;RestForMPRegen()
+		Sleep(Random(80000,85545,1))
 
 	WEnd
-
 EndFunc
 
 Func _RechargeThird()
@@ -760,6 +647,53 @@ Func _RechargeThird()
 		RestForMPRegen()
 
 		Sleep(Random(40000,45545,1))
+
+	WEnd
+
+EndFunc
+
+Func _RechargeFour()
+
+	SuccessSound()
+	$isHalt = False
+
+	local $index = 0
+
+	While $isHalt = False
+		$index = 0
+
+		While $windowsCount - $index > 0
+
+			TargetOnPMFour()
+
+			RechargeCraft()
+
+			$index += 1
+
+			If $windowsCount > 1 Then
+
+				ALTTAB($windowsCount - 1)
+				TargetOnPMFour()
+				RechargeCraft()
+				$index += 1
+
+				If	$windowsCount > 2 Then
+
+					ALTTAB($windowsCount - 1)
+					TargetOnPMFour()
+					RechargeCraft()
+					$index += 1
+
+				EndIf
+
+			EndIf
+
+
+		WEnd
+
+		Sleep(Random(4000,4545,1))
+		;RestForMPRegen()
+		Sleep(Random(80000,85545,1))
 
 	WEnd
 
