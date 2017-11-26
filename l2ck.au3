@@ -1279,3 +1279,99 @@ Func MoveLeftDown()
 	Sleep(Random(111,344,1))
 
 EndFunc
+
+
+Func ClearTarget()
+
+   Send("{SHIFTDOWN}")
+
+	MouseClick("left", 601, 44, 1, 200)
+	Sleep(Random(211, 311,1))
+
+	Send("{SHIFTUP}")
+
+	Sleep(Random(211, 311,1))
+
+EndFunc
+
+;F1
+Func AttackF1()
+
+	MouseClick("left", 402, (995 - $toSmallY), 2, 300)
+	Sleep(Random(211,344,1))
+
+EndFunc
+
+;F2
+Func GreaterHeal()
+
+	MouseClick("left", 442, (995 - $toSmallY), 2, 150)
+	Sleep(Random(111,294,1))
+
+EndFunc
+
+;F3
+Func Sweep()
+
+	MouseClick("left", 470, (995 - $toSmallY), 2, 200)
+	Sleep(Random(111,244,1))
+
+EndFunc
+
+;F4
+Func MajorHeal()
+
+	MouseClick("left", 515, (995 - $toSmallY), 2, 150)
+	Sleep(Random(111,294,1))
+
+EndFunc
+
+;F7
+Func PickUp()
+
+	MouseClick("left", 620, (995 - $toSmallY), 2, 300)
+	Sleep(Random(111,294,1))
+
+EndFunc
+
+;F8
+Func Recharge()
+
+
+	MouseClick("left", 667, (995 - $toSmallY), 2, 300)
+	Sleep(Random(111,294,1))
+
+EndFunc
+
+;F9
+Func TargetNext()
+
+	MouseClick("left", 707, (995 - $toSmallY), 2, 300)
+	Sleep(Random(211,344,1))
+
+EndFunc
+
+;second panel F1
+Func AttackForce()
+
+	MouseClick("left", 402, (950 - $toSmallY), 2, 300)
+	Sleep(Random(211,344,1))
+
+EndFunc
+
+;second panel F12
+Func ToggleSSD()
+
+	MouseClick("right", 818, (950 - $toSmallY), 1, 300)
+	Sleep(Random(211,344,1))
+
+EndFunc
+
+;Third's panel F1
+Func RechargeCraft()
+
+
+	MouseClick("left", 400, (900 - $toSmallY), 2, 300)
+	Sleep(Random(111,294,1))
+
+EndFunc

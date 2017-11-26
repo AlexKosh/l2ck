@@ -150,35 +150,6 @@ Func Attack()
 
 EndFunc
 
-Func ClearTarget()
-
-	MouseClick("left", 562, 44, 2, 200)
-
-EndFunc
-
-Func TargetNext()
-
-
-	MouseClick("left", 707, (995 - $toSmallY), 2, 300)
-	Sleep(Random(211,344,1))
-
-EndFunc
-
-Func PickUp()
-
-
-	MouseClick("left", 620, (995 - $toSmallY), 2, 300)
-	Sleep(Random(111,294,1))
-
-EndFunc
-
-Func Sweep()
-
-	MouseClick("left", 470, (995 - $toSmallY), 2, 200)
-	Sleep(Random(111,244,1))
-
-EndFunc
-
 local $moveCount = 0;
 
 Func SelectTarget()
@@ -752,9 +723,3 @@ Sleep(Random(111,344,1))
 startALTTABProc()
 
 exec()
-Beep(700, 40)
-
-;SuccessSound()
-;SuccessSound()
-;SuccessSound()
-
