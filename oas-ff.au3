@@ -7,8 +7,7 @@
 #include <MsgBoxConstants.au3>
 #RequireAdmin
 
-SRandom(@MSEC)
-global const $LogFile = "debugtest.log"
+$LogFile = "debugtest.log"
 ;small = 265 / large = 1
 $toSmallY = 1
 ;small = 275 / large 1
@@ -43,236 +42,11 @@ global $lastWCHealTime = 30001
 global $healWCTimer = 0
 
 
-HotKeySet("{F11}", "_SeekAndDestroy")
-HotKeySet("{F10}", "_Halt")
-HotKeySet("{F9}", "_FollowMe")
+HotKeySet("^{9}", "_SeekAndDestroy")
+HotKeySet("^{0}", "_Halt")
+HotKeySet("^{8}", "_FollowMe")
 HotKeySet("!{Esc}", "_Terminate")
 
-Func _Halt()
-
-	$isHalt = True
-
-	Beep(600, 50)
-	Beep(500, 50)
-
-	While $isHalt = True
-
-		Sleep(Random(251,444,1))
-
-	WEnd
-
-EndFunc
-
-Func _FollowMe()
-
-   SuccessSound()
-   MoveToPartymemberOne()
-
-EndFunc
-
-func LogWrite($data)
-    FileWrite($LogFile, $data & chr(10))
-endfunc
-
-
-Func IsMyHPDamagedOver45()
-
-    const $SizeSearch = 80
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 50
-    const $PosY = 75
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0x421010, 10)
-
-    const $MaxX = 85
-    const $MinX = 5
-    const $MaxY = 100
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
-endfunc
-
-Func IsMyHPDamagedOver60()
-
-    const $SizeSearch = 80
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 50
-    const $PosY = 75
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0x421010, 10)
-
-    const $MaxX = 108
-    const $MinX = 5
-    const $MaxY = 100
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
-endfunc
-;actual 50%
-Func IsMyHPDamagedOver80()
-
-    const $SizeSearch = 80
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 50
-    const $PosY = 75
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0x421010, 10)
-
-    const $MaxX = 90
-    const $MinX = 5
-    const $MaxY = 100
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
-endfunc
-
-;for mass heal warc on 50%
-Func IsPMOneOrTwoHPBelow90()
-    const $SizeSearch = 40
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 50
-    const $PosY = 300
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0x5E2936, 10)
-
-    const $MaxX = 95
-    const $MinX = 15
-    const $MaxY = 450
-	const $MinY = 280
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
- endfunc
-
-Func IsMyMPUpper30()
-
-    const $SizeSearch = 80
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 120
-    const $PosY = 70
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0x005DB8, 10)
-
-    const $MaxX = 160
-    const $MinX = 75
-    const $MaxY = 100
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
-endfunc
-
-Func IsDialogBoxAppear()
-    const $SizeSearch = 40
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 466
-    const $PosY = (1020 - $toSmallY)
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0xE6D9BE, 10)
-
-    const $MaxX = 470
-    const $MinX = 450
-    const $MaxY = (1040 - $toSmallY)
-	const $MinY = (1000 - $toSmallY)
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
- endfunc
 
 Func CalculateStunChance()
 
@@ -411,88 +185,6 @@ Func Attack()
 	WEnd
 
 	;Sweep()
-
-EndFunc
-
-Func ClearTarget()
-
-   Send("{SHIFTDOWN}")
-
-	MouseClick("left", 601, 44, 1, 200)
-	Sleep(Random(211, 311,1))
-
-	Send("{SHIFTUP}")
-
-	Sleep(Random(211, 311,1))
-
-EndFunc
-
-
-Func MakeCameraVerticalAgain()
-
-	If $toSmallY = 1 or $toSmallX = 1 Then
-		;large
-		MouseClickDrag ( "right", 950, 420, 950, 550, 200)
-
-	Else
-		;small
-		MouseClickDrag ( "right", 680, 300, 680, 430, 200)
-
-	EndIf
-
-	Sleep(Random(111,344,1))
-
-EndFunc
-
-Func MoveLeftUp()
-
-	MouseClick("left", (500 - $toSmallX), (250 - ($toSmallY /2)), 1, 200)
-	Sleep(Random(111,344,1))
-
-EndFunc
-
-Func MoveRightUp()
-
-	MouseClick("left", (1550 - ($toSmallX *2)), (250 - ($toSmallY /2)), 1, 200)
-	Sleep(Random(111,344,1))
-
-EndFunc
-
-Func MoveRightDown()
-
-	MouseClick("left", (1550 - ($toSmallX *2)) , (840 - $toSmallY), 1, 200)
-	Sleep(Random(111,344,1))
-
-EndFunc
-
-Func MoveLeftDown()
-
-	;MouseClick("left", 500, 840, 1, 200)
-	MouseClick("left", (500 - $toSmallX), (840 - $toSmallY), 1, 200)
-	Sleep(Random(111,344,1))
-
-EndFunc
-
-Func TargetNext()
-
-
-	MouseClick("left", 707, (995 - $toSmallY), 2, 300)
-	Sleep(Random(211,344,1))
-
-EndFunc
-
-Func PickUp()
-
-
-	MouseClick("left", 620, (995 - $toSmallY), 2, 300)
-	Sleep(Random(111,294,1))
-
-EndFunc
-
-Func Sweep()
-
-	MouseClick("left", 470, (995 - $toSmallY), 2, 200)
-	Sleep(Random(111,244,1))
 
 EndFunc
 
@@ -1071,27 +763,6 @@ Func startALTTABProc()
 
 EndFunc
 
-Func ALTTAB($q)
-
-	Sleep(Random(251,444,1))
-	Send("{ALTDOWN}")
-
-	While $q > 0
-
-		Sleep(Random(151,314,1))
-		Send("{TAB}")
-
-		$q -= 1
-
-	WEnd
-
-	Sleep(Random(311,444,1))
-	Send("{ALTUP}")
-	Sleep(Random(511,644,1))
-
-EndFunc
-
-
 Func _SeekAndDestroy()
 
 ;script budet ispolniatsa poka kolvo prohodov zika budet menshe
@@ -1133,10 +804,3 @@ While True
 	sleep(1000)
 
 WEnd
-
-Beep(700, 40)
-
-;SuccessSound()
-;SuccessSound()
-;SuccessSound()
-

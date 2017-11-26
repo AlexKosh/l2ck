@@ -65,7 +65,7 @@ Func CalculateStunChance()
 
 EndFunc
 
-Func Attack()
+Func AttackTarget()
 
 	;MouseClick("left", 392, 995, 2, 200)
 	;Sleep(Random(291,544,1))
@@ -140,11 +140,6 @@ Func Attack()
 
 EndFunc
 
-Func ClearTarget()
-
-	MouseClick("left", 562, 44, 2, 200)
-
-EndFunc
 ;legacy
 Func MoveForward()
 	;move right for catacombs
@@ -174,27 +169,6 @@ Func MoveForwardLegacy()
 
 	MouseClick("left", 950, 450, 1, 200)
 	Sleep(Random(111,344,1))
-
-EndFunc
-
-Func TargetNext()
-
-	MouseClick("left", 707, (995 - $toSmallY), 2, 300)
-	Sleep(Random(211,344,1))
-
-EndFunc
-
-Func PickUp()
-
-	MouseClick("left", 620, (995 - $toSmallY), 2, 300)
-	Sleep(Random(111,294,1))
-
-EndFunc
-
-Func Sweep()
-
-	MouseClick("left", 470, (995 - $toSmallY), 2, 200)
-	Sleep(Random(111,244,1))
 
 EndFunc
 
@@ -232,7 +206,7 @@ Func SelectTarget()
 	;tut idet proverka ne napal li agro-mob i ne vzialsia li target avtomatom
 	If IsTargetExist() Then
 		$targetDetected = True
-		Attack()
+		AttackTarget()
 		Return
 	EndIf
 
@@ -244,7 +218,7 @@ Func SelectTarget()
 		TakeAssistFromPMOne()
 		If IsTargetExist() Then
 			$targetDetected = True
-			Attack()
+			AttackTarget()
 			Return
 		EndIf
 	EndIf
@@ -256,7 +230,7 @@ Func SelectTarget()
 		TakeAssistFromPMTwo()
 		If IsTargetExist() Then
 			$targetDetected = True
-			Attack()
+			AttackTarget()
 			Return
 		EndIf
 	EndIf
@@ -264,7 +238,7 @@ Func SelectTarget()
 	;tut idet proverka ne napal li agro-mob i ne vzialsia li target avtomatom
 	If IsTargetExist() Then
 		$targetDetected = True
-		Attack()
+		AttackTarget()
 		Return
 	EndIf
 
@@ -272,7 +246,7 @@ Func SelectTarget()
 	TargetNext()
 	If IsTargetExist() Then
 		$targetDetected = True
-		Attack()
+		AttackTarget()
 		Return
 	EndIf
 
@@ -300,7 +274,7 @@ Func SelectTarget()
 			TakeAssistFromPMOne()
 			If IsTargetExist() Then
 				$targetDetected = True
-				Attack()
+				AttackTarget()
 				Return
 			EndIf
 		EndIf
@@ -312,7 +286,7 @@ Func SelectTarget()
 		TakeAssistFromPMTwo()
 		If IsTargetExist() Then
 			$targetDetected = True
-			Attack()
+			AttackTarget()
 			Return
 		EndIf
 	EndIf
@@ -320,7 +294,7 @@ Func SelectTarget()
 		;tut idet proverka ne napal li agro-mob i ne vzialsia li target avtomatom
 		If IsTargetExist() Then
 			$targetDetected = True
-			Attack()
+			AttackTarget()
 			Return
 		EndIf
 
@@ -328,7 +302,7 @@ Func SelectTarget()
 		TargetNext()
 		If IsTargetExist() Then
 			$targetDetected = True
-			Attack()
+			AttackTarget()
 			Return
 		EndIf
 
@@ -357,7 +331,7 @@ Func SelectTarget()
 			TakeAssistFromPMOne()
 			If IsTargetExist() Then
 				$targetDetected = True
-				Attack()
+				AttackTarget()
 				Return
 			EndIf
 		EndIf
@@ -369,7 +343,7 @@ Func SelectTarget()
 		TakeAssistFromPMTwo()
 		If IsTargetExist() Then
 			$targetDetected = True
-			Attack()
+			AttackTarget()
 			Return
 		EndIf
 	EndIf
@@ -377,7 +351,7 @@ Func SelectTarget()
 		;tut idet proverka ne napal li agro-mob i ne vzialsia li target avtomatom
 		If IsTargetExist() Then
 			$targetDetected = True
-			Attack()
+			AttackTarget()
 			Return
 		EndIf
 
@@ -385,7 +359,7 @@ Func SelectTarget()
 		TargetNext()
 		If IsTargetExist() Then
 			$targetDetected = True
-			Attack()
+			AttackTarget()
 			Return
 		EndIf
 
@@ -417,7 +391,7 @@ Func SelectTarget()
 			TakeAssistFromPMOne()
 			If IsTargetExist() Then
 				$targetDetected = True
-				Attack()
+				AttackTarget()
 				Return
 			EndIf
 		EndIf
@@ -429,7 +403,7 @@ Func SelectTarget()
 		TakeAssistFromPMTwo()
 		If IsTargetExist() Then
 			$targetDetected = True
-			Attack()
+			AttackTarget()
 			Return
 		EndIf
 	EndIf
@@ -437,7 +411,7 @@ Func SelectTarget()
 		;tut idet proverka ne napal li agro-mob i ne vzialsia li target avtomatom
 		If IsTargetExist() Then
 			$targetDetected = True
-			Attack()
+			AttackTarget()
 			Return
 		EndIf
 
@@ -445,7 +419,7 @@ Func SelectTarget()
 		TargetNext()
 		If IsTargetExist() Then
 			$targetDetected = True
-			Attack()
+			AttackTarget()
 			Return
 		EndIf
 
@@ -475,7 +449,7 @@ Func SelectTarget()
 			TakeAssistFromPMOne()
 			If IsTargetExist() Then
 				$targetDetected = True
-				Attack()
+				AttackTarget()
 				Return
 			EndIf
 		EndIf
@@ -487,7 +461,7 @@ Func SelectTarget()
 		TakeAssistFromPMTwo()
 		If IsTargetExist() Then
 			$targetDetected = True
-			Attack()
+			AttackTarget()
 			Return
 		EndIf
 	EndIf
@@ -495,7 +469,7 @@ Func SelectTarget()
 		;tut idet proverka ne napal li agro-mob i ne vzialsia li target avtomatom
 		If IsTargetExist() Then
 			$targetDetected = True
-			Attack()
+			AttackTarget()
 			Return
 		EndIf
 
@@ -503,7 +477,7 @@ Func SelectTarget()
 		TargetNext()
 		If IsTargetExist() Then
 			$targetDetected = True
-			Attack()
+			AttackTarget()
 			Return
 		EndIf
 
@@ -744,7 +718,4 @@ startALTTABProc()
 exec()
 Beep(700, 40)
 
-;SuccessSound()
-;SuccessSound()
-;SuccessSound()
 

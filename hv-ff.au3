@@ -45,10 +45,9 @@ global $safePDTimer = 0
 global $lastWCHealTime = 30001
 global $healWCTimer = 0
 
-
-HotKeySet("{F11}", "_HealMode")
-HotKeySet("{F10}", "_Halt")
-HotKeySet("{F9}", "_FollowMe")
+HotKeySet("^{9}", "_HealMode")
+HotKeySet("^{0}", "_Halt")
+HotKeySet("^{8}", "_FollowMe")
 HotKeySet("!{Esc}", "_Terminate")
 
 HotKeySet("^{6}", "_RechargeTarget")
@@ -58,6 +57,10 @@ HotKeySet("^{2}", "_RechargeSecond")
 HotKeySet("^{3}", "_RechargeThird")
 HotKeySet("^{4}", "_RechargeFour")
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6e93dfc138f405e9b9cd3232d9619a5cbff51aad
 Func IsMyMPBelow30()
 
     const $SizeSearch = 80
@@ -67,9 +70,15 @@ Func IsMyMPBelow30()
     const $PosY = 70
 
     $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+<<<<<<< HEAD
                          0x004DBD, 10)
 
     const $MaxX = 90
+=======
+                         0x005DB8, 10)
+
+    const $MaxX = 75
+>>>>>>> 6e93dfc138f405e9b9cd3232d9619a5cbff51aad
     const $MinX = 25
     const $MaxY = 100
 
@@ -89,6 +98,7 @@ Func IsMyMPBelow30()
 		;ErrorSound()
         return False
     endif
+<<<<<<< HEAD
 endfunc
 
 Func IsPMTwoMPBelow60()
@@ -122,6 +132,8 @@ Func IsPMTwoMPBelow60()
 		;ErrorSound()
         return False
     endif
+=======
+>>>>>>> 6e93dfc138f405e9b9cd3232d9619a5cbff51aad
 endfunc
 
 Func IsPMThreeMPBelow60()
@@ -157,6 +169,7 @@ Func IsPMThreeMPBelow60()
     endif
 endfunc
 
+<<<<<<< HEAD
 Func ClearTarget()
 
    Send("{SHIFTDOWN}")
@@ -229,6 +242,8 @@ Func Sweep()
 	Sleep(Random(111,244,1))
 
 EndFunc
+=======
+>>>>>>> 6e93dfc138f405e9b9cd3232d9619a5cbff51aad
 
 local $moveCount = 0;
 
@@ -707,23 +722,11 @@ WinActivate("Lineage")
 
 ;ojidatet paru sek poka progruzit
 Sleep(Random(1911,2544,1))
-
 StartSound()
-Sleep(Random(111,344,1))
-;startALTTABProc()
 
 While True
 
 	Sleep(1000)
 
 WEnd
-
-
-Beep(700, 40)
-Beep(700, 40)
-Beep(700, 40)
-
-;SuccessSound()
-;SuccessSound()
-;SuccessSound()
 
