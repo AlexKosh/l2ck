@@ -19,9 +19,6 @@ global $targetDetected = False
 global $pmOneThreatened = False
 global $pmOneIsSafe = True
 
-;schetchik prohoda osnovnogo zikla (nashel moba, nachal bit', ubil, schetchik +1)
-global $defeatedMobs = 0
-
 global $lastHealTime = 20001
 global $healTimer = 0
 
@@ -45,6 +42,7 @@ global $safePDTimer = 0
 global $lastWCHealTime = 30001
 global $healWCTimer = 0
 
+
 HotKeySet("^{9}", "_HealMode")
 HotKeySet("^{0}", "_Halt")
 HotKeySet("^{8}", "_FollowMe")
@@ -57,195 +55,6 @@ HotKeySet("^{2}", "_RechargeSecond")
 HotKeySet("^{3}", "_RechargeThird")
 HotKeySet("^{4}", "_RechargeFour")
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 6e93dfc138f405e9b9cd3232d9619a5cbff51aad
-Func IsMyMPBelow30()
-
-    const $SizeSearch = 80
-    const $MinNbPixel = 3
-    const $OptNbPixel = 10
-    const $PosX = 50
-    const $PosY = 70
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-<<<<<<< HEAD
-                         0x004DBD, 10)
-
-    const $MaxX = 90
-=======
-                         0x005DB8, 10)
-
-    const $MaxX = 75
->>>>>>> 6e93dfc138f405e9b9cd3232d9619a5cbff51aad
-    const $MinX = 25
-    const $MaxY = 100
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
-<<<<<<< HEAD
-endfunc
-
-Func IsPMTwoMPBelow60()
-    const $SizeSearch = 40
-    const $MinNbPixel = 2
-    const $OptNbPixel = 6
-    const $PosX = 48
-    const $PosY = 390
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0x213F5B, 10)
-
-    const $MaxX = 145
-    const $MinX = 15
-    const $MaxY = 360
-	const $MinY = 320
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
-=======
->>>>>>> 6e93dfc138f405e9b9cd3232d9619a5cbff51aad
-endfunc
-
-Func IsPMThreeMPBelow60()
-    const $SizeSearch = 40
-    const $MinNbPixel = 2
-    const $OptNbPixel = 6
-    const $PosX = 110
-    const $PosY = 390
-
-    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
-                         0x213F5B, 10)
-
-    const $MaxX = 145
-    const $MinX = 15
-    const $MaxY = 410
-	const $MinY = 370
-
-    if not @error then
-        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
-            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
-                     ", " & $coords[1] & " pixels = " & $coords[2])
-					 ;SuccessSound()
-            return True
-        else
-            LogWrite("IsTargetExist() - Fail #1")
-			;ErrorSound()
-            return False
-        endif
-    else
-        LogWrite("IsTargetExist() - Fail #2")
-		;ErrorSound()
-        return False
-    endif
-endfunc
-
-<<<<<<< HEAD
-Func ClearTarget()
-
-   Send("{SHIFTDOWN}")
-
-	MouseClick("left", 601, 44, 1, 200)
-	Sleep(Random(211, 311,1))
-
-	Send("{SHIFTUP}")
-
-	Sleep(Random(211, 311,1))
-
-EndFunc
-
-;F9
-Func TargetNext()
-
-
-	MouseClick("left", 707, (995 - $toSmallY), 2, 300)
-	Sleep(Random(211,344,1))
-
-EndFunc
-
-;F7
-Func PickUp()
-
-
-	MouseClick("left", 620, (995 - $toSmallY), 2, 300)
-	Sleep(Random(111,294,1))
-
-EndFunc
-
-;F8
-Func Recharge()
-
-
-	MouseClick("left", 667, (995 - $toSmallY), 2, 300)
-	Sleep(Random(111,294,1))
-
-EndFunc
-
-;Third's panel F1
-Func RechargeCraft()
-
-
-	MouseClick("left", 400, (900 - $toSmallY), 2, 300)
-	Sleep(Random(111,294,1))
-
-EndFunc
-
-;F4
-Func MajorHeal()
-
-
-	MouseClick("left", 515, (995 - $toSmallY), 2, 150)
-	Sleep(Random(111,294,1))
-
-EndFunc
-;F2
-Func GreaterHeal()
-
-
-	MouseClick("left", 442, (995 - $toSmallY), 2, 150)
-	Sleep(Random(111,294,1))
-
-EndFunc
-;F3
-Func Sweep()
-
-	MouseClick("left", 470, (995 - $toSmallY), 2, 200)
-	Sleep(Random(111,244,1))
-
-EndFunc
-=======
->>>>>>> 6e93dfc138f405e9b9cd3232d9619a5cbff51aad
-
-local $moveCount = 0;
 
 ;use healing pot on F4
 Func UseHealingPot()
@@ -312,7 +121,6 @@ Func Heal()
 
 EndFunc
 
-
 Func startALTTABProc()
 	Sleep(Random(211,744,1))
 
@@ -337,7 +145,6 @@ Func startALTTABProc()
 	 Sleep(Random(2211,2744,1))
 
 EndFunc
-
 
 Func BuffOrHeal()
 
@@ -367,7 +174,71 @@ Func BuffOrHeal()
 
 EndFunc
 
-;section for craft
+Func IsMyMPBelow30()
+
+    const $SizeSearch = 80
+    const $MinNbPixel = 3
+    const $OptNbPixel = 10
+    const $PosX = 50
+    const $PosY = 70
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x004DBD, 10)
+
+    const $MaxX = 90
+    const $MinX = 25
+    const $MaxY = 100
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+endfunc
+
+Func IsPMThreeMPBelow60()
+    const $SizeSearch = 40
+    const $MinNbPixel = 2
+    const $OptNbPixel = 6
+    const $PosX = 110
+    const $PosY = 390
+
+    $coords = FFBestSpot($SizeSearch, $MinNbPixel, $OptNbPixel, $PosX, $PosY, _
+                         0x213F5B, 10)
+
+    const $MaxX = 145
+    const $MinX = 15
+    const $MaxY = 410
+	const $MinY = 370
+
+    if not @error then
+        if $MinX < $coords[0] and $coords[0] < $MaxX and $coords[1] < $MaxY  and $MinY < $coords[1] then
+            LogWrite("IsTargetExist() - Success, coords = " & $coords[0] & _
+                     ", " & $coords[1] & " pixels = " & $coords[2])
+					 ;SuccessSound()
+            return True
+        else
+            LogWrite("IsTargetExist() - Fail #1")
+			;ErrorSound()
+            return False
+        endif
+    else
+        LogWrite("IsTargetExist() - Fail #2")
+		;ErrorSound()
+        return False
+    endif
+endfunc
 
 Func RestForMPRegen()
 
@@ -722,11 +593,13 @@ WinActivate("Lineage")
 
 ;ojidatet paru sek poka progruzit
 Sleep(Random(1911,2544,1))
+
 StartSound()
+Sleep(Random(111,344,1))
+;startALTTABProc()
 
 While True
 
 	Sleep(1000)
 
 WEnd
-
