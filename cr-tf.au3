@@ -23,7 +23,7 @@ HotKeySet("!{Esc}", "_Terminate")
 ;click craft btn
 Func Craft()
 
-	MouseClick("left", 1156, (675 - $toSmallY), 1, 300)
+	MouseClick("left", 600, 520, 1, 300)
 	Sleep(Random(211,1944,1))
 
 EndFunc
@@ -35,7 +35,7 @@ Func _Craft()
 		Sleep(1000)
 
 		If	IsMyMPUpper30() Then
-			Beep(500, 60)
+			;Beep(500, 60)
 			Sleep(Random(111,344,1))
 			Craft()
 		EndIf

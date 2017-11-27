@@ -9,7 +9,7 @@
 
 $LogFile = "debugtest.log"
 ;small = 265 / large = 1
-$toSmallY = 265
+$toSmallY = 300
 ;small = 275 / large 1
 $toSmallX = 275
 
@@ -364,7 +364,7 @@ While True
 
 	EndIf
 	;pm3 must be a spoiler
-	If IsPMThreeMPBelow60() and IsMyMPUpper30() Then
+	If IsPMThreeMPBelow60() and IsMyMPUpper30() and false Then
 
 		TargetOnPMThree()
 		Recharge()
