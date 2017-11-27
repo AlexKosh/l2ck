@@ -29,9 +29,9 @@ global $BuffTimer = 0
 global $lastEEHealTime = 30001
 global $healEETimer = 0
 
-HotKeySet("{F11}", "_HealMode")
-HotKeySet("{F10}", "_Halt")
-HotKeySet("{F9}", "_FollowMe")
+HotKeySet("^{9}", "_HealMode")
+HotKeySet("^{0}", "_Halt")
+HotKeySet("^{8}", "_FollowMe")
 
 HotKeySet("!{Esc}", "_Terminate")
 HotKeySet("^{1}", "_HealFirst")
@@ -61,7 +61,7 @@ Func UseHealingPot()
 
 EndFunc
 
-;use MajorHeal on me F4
+;~ ;use MajorHeal on me F4
 Func HealMyself()
 	local $needCleartTg = False
 
@@ -134,6 +134,265 @@ EndFunc
 
 
 Func _HealMode()
+
+	SuccessSound()
+
+	$isHalt = False
+	local $isSomeoneBelow40 = True
+	;local $isSomeoneBelow60 = False
+
+	While $isHalt = False
+
+		While $isSomeoneBelow40 = True
+
+			$isSomeoneBelow40 = False
+
+			If IsPMOneHPBelow40() Then
+
+				TargetOnPMOne()
+				MajorHeal()
+
+				$isSomeoneBelow40 = True
+
+			EndIf
+
+			If IsPMTwoHPBelow40() Then
+
+				TargetOnPMTwo()
+				MajorHeal()
+
+				$isSomeoneBelow40 = True
+
+			EndIf
+
+			If IsPMThreeHPBelow40() Then
+
+				TargetOnPMThree()
+				MajorHeal()
+
+				$isSomeoneBelow40 = True
+
+			EndIf
+
+			If IsPMFourHPBelow40() Then
+
+				TargetOnPMFour()
+				MajorHeal()
+
+				$isSomeoneBelow40 = True
+
+			EndIf
+
+			If IsPMFiveHPBelow40() Then
+
+				TargetOnPMFive()
+				MajorHeal()
+
+				$isSomeoneBelow40 = True
+
+			EndIf
+
+			If IsPMSixHPBelow40() Then
+
+				TargetOnPMSix()
+				MajorHeal()
+
+				$isSomeoneBelow40 = True
+
+			EndIf
+
+			Sleep(Random(251,344,1))
+
+		WEnd
+
+		If IsPMFromOneToSixHPBelow40() Then
+
+			ContinueLoop
+
+		Else
+
+			If IsPMOneHPBelow60() Then
+
+				TargetOnPMOne()
+				GreaterHeal()
+
+			EndIf
+
+		EndIf
+
+		If IsPMFromOneToSixHPBelow40() Then
+
+			ContinueLoop
+
+		Else
+
+			If IsPMTwoHPBelow60() Then
+
+				TargetOnPMTwo()
+				GreaterHeal()
+
+			EndIf
+
+		EndIf
+
+		If IsPMFromOneToSixHPBelow40() Then
+
+			ContinueLoop
+
+		Else
+
+			If IsPMThreeHPBelow60() Then
+
+				TargetOnPMThree()
+				GreaterHeal()
+
+			EndIf
+
+		EndIf
+
+		If IsPMFromOneToSixHPBelow40() Then
+
+			ContinueLoop
+
+		Else
+
+			If IsPMFourHPBelow60() Then
+
+				TargetOnPMFour()
+				GreaterHeal()
+
+			EndIf
+
+		EndIf
+
+		If IsPMFromOneToSixHPBelow40() Then
+
+			ContinueLoop
+
+		Else
+
+			If IsPMFiveHPBelow60() Then
+
+				TargetOnPMFive()
+				GreaterHeal()
+
+			EndIf
+
+		EndIf
+
+		If IsPMFromOneToSixHPBelow40() Then
+
+			ContinueLoop
+
+		Else
+
+			If IsPMSixHPBelow60() Then
+
+				TargetOnPMSix()
+				GreaterHeal()
+
+			EndIf
+
+		EndIf
+
+		Sleep(Random(251,344,1))
+
+		If IsPMFromOneToSixHPBelow40() Then
+
+			ContinueLoop
+
+		Else
+
+			If IsPMOneHPBelow80() Then
+
+				TargetOnPMOne()
+				GreaterHeal()
+
+			EndIf
+
+		EndIf
+
+		If IsPMFromOneToSixHPBelow40() Then
+
+			ContinueLoop
+
+		Else
+
+			If IsPMTwoHPBelow80() Then
+
+				TargetOnPMTwo()
+				GreaterHeal()
+
+			EndIf
+
+		EndIf
+
+		If IsPMFromOneToSixHPBelow40() Then
+
+			ContinueLoop
+
+		Else
+
+			If IsPMThreeHPBelow80() Then
+
+				TargetOnPMThree()
+				GreaterHeal()
+
+			EndIf
+
+		EndIf
+
+		If IsPMFromOneToSixHPBelow40() Then
+
+			ContinueLoop
+
+		Else
+
+			If IsPMFourHPBelow80() Then
+
+				TargetOnPMFour()
+				GreaterHeal()
+
+			EndIf
+
+		EndIf
+
+		If IsPMFromOneToSixHPBelow40() Then
+
+			ContinueLoop
+
+		Else
+
+			If IsPMFiveHPBelow80() Then
+
+				TargetOnPMFive()
+				GreaterHeal()
+
+			EndIf
+
+		EndIf
+
+		If IsPMFromOneToSixHPBelow40() Then
+
+			ContinueLoop
+
+		Else
+
+			If IsPMSixHPBelow80() Then
+
+				TargetOnPMSix()
+				GreaterHeal()
+
+			EndIf
+
+		EndIf
+
+		Sleep(Random(251,344,1))
+	WEnd
+
+EndFunc
+
+Func _HealModeLegacy()
 
 	SuccessSound()
 

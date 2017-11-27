@@ -13,6 +13,8 @@ $toSmallY = 1
 ;small = 275 / large 1
 $toSmallX = 1
 
+global $warcWOParty = False
+
 global $targetDetected = False
 global $pmOneThreatened = False
 global $pmOneIsSafe = True
@@ -34,8 +36,6 @@ global $secondSWChanged = False
 global $lastBuffTime = 1140001
 global $BuffTimer = 0
 
-global $warcWOParty = True
-
 global $safePartyDismiss = 0
 global $safePDTimer = 0
 
@@ -46,20 +46,20 @@ HotKeySet("^{0}", "_Halt")
 HotKeySet("^{8}", "_FollowMe")
 HotKeySet("!{Esc}", "_Terminate")
 
-
+;nado ispravit znachenia
 Func CalculateStunChance()
 
 	$stunChance = 0
 	;1 k 30 chance
 	If IsMyMPUpper30() Then
-
-		$stunChance = 70
+		;70
+		$stunChance = 0
 
 	EndIf
 	;1 k 3
 	If IsMyHPDamagedOver60() Then
-
-		$stunChance = 98
+		;98
+		$stunChance = 0
 
 	EndIf
 
@@ -88,14 +88,16 @@ Func AttackTarget()
 		BuffUsWarcIfYouCan()
 		DismissWCFromParty()
 
-		;esli u PMOne HP ne max to proveriaem target s nego
-		If IsPMOneAttacked() Then
+		;esli u PMThree HP ne max to proveriaem target s nego
+		If IsPMThreeAttacked() Then
 
 			;proveriaem ne sagrilsia li mob na party member one
-			TakeAssistFromPMOne()
+			TakeAssistFromPMThree()
 			If IsTargetExist() Then
 				$targetDetected = True
-				MouseClick("left", 392, (995 - $toSmallY), 2, 200)
+				MouseClick("left", 434, (995 - $toSmallY), 2, 150)
+				Sleep(Random(550,995,1))
+				ContinueLoop
 			EndIf
 		EndIf
 
@@ -104,6 +106,19 @@ Func AttackTarget()
 
 			;proveriaem ne sagrilsia li mob na party member one
 			TakeAssistFromPMTwo()
+			If IsTargetExist() Then
+				$targetDetected = True
+				MouseClick("left", 392, (995 - $toSmallY), 2, 200)
+				Sleep(Random(550,995,1))
+				ContinueLoop
+			EndIf
+		EndIf
+
+		;esli u PMOne HP ne max to proveriaem target s nego
+		If IsPMOneAttacked() Then
+
+			;proveriaem ne sagrilsia li mob na party member one
+			TakeAssistFromPMOne()
 			If IsTargetExist() Then
 				$targetDetected = True
 				MouseClick("left", 392, (995 - $toSmallY), 2, 200)
@@ -690,8 +705,8 @@ Func _SpoilMode()
 
 		Sweep()
 
-		;PickUp()
-		;PickUp()
+		PickUp()
+		PickUp()
 		;PickUp()
 		;PickUp()
 
