@@ -9,9 +9,9 @@
 
 $LogFile = "debugtest.log"
 ;small = 265 / large = 1
-$toSmallY = 300
+$toSmallY = 1
 ;small = 275 / large 1
-$toSmallX = 275
+$toSmallX = 1
 
 global $targetDetected = False
 global $pmOneThreatened = False
@@ -132,8 +132,24 @@ Func startALTTABProc()
 
 EndFunc
 
+;F4
+Func Battleheal()
 
-Func _HealMode()
+	MouseClick("left", 515, (995 - $toSmallY), 2, 500)
+	Sleep(Random(70,170,1))
+
+EndFunc
+
+;F2
+Func GreaterHealRB()
+
+	MouseClick("left", 442, (995 - $toSmallY), 2, 500)
+	Sleep(Random(70,170,1))
+
+EndFunc
+
+
+Func _HealModeLegacy()
 
 	SuccessSound()
 
@@ -150,7 +166,13 @@ Func _HealMode()
 			If IsPMOneHPBelow40() Then
 
 				TargetOnPMOne()
-				MajorHeal()
+
+				While IsPMOneHPBelow40()
+
+					Battleheal()
+					Sleep(1250)
+
+				WEnd
 
 				$isSomeoneBelow40 = True
 
@@ -159,7 +181,13 @@ Func _HealMode()
 			If IsPMTwoHPBelow40() Then
 
 				TargetOnPMTwo()
-				MajorHeal()
+
+				While IsPMTwoHPBelow40()
+
+					Battleheal()
+					Sleep(1250)
+
+				WEnd
 
 				$isSomeoneBelow40 = True
 
@@ -168,7 +196,13 @@ Func _HealMode()
 			If IsPMThreeHPBelow40() Then
 
 				TargetOnPMThree()
-				MajorHeal()
+
+				While IsPMThreeHPBelow40()
+
+					Battleheal()
+					Sleep(1250)
+
+				WEnd
 
 				$isSomeoneBelow40 = True
 
@@ -177,7 +211,13 @@ Func _HealMode()
 			If IsPMFourHPBelow40() Then
 
 				TargetOnPMFour()
-				MajorHeal()
+
+				While IsPMFourHPBelow40()
+
+					Battleheal()
+					Sleep(1250)
+
+				WEnd
 
 				$isSomeoneBelow40 = True
 
@@ -186,7 +226,13 @@ Func _HealMode()
 			If IsPMFiveHPBelow40() Then
 
 				TargetOnPMFive()
-				MajorHeal()
+
+				While IsPMFiveHPBelow40()
+
+					Battleheal()
+					Sleep(1250)
+
+				WEnd
 
 				$isSomeoneBelow40 = True
 
@@ -195,7 +241,13 @@ Func _HealMode()
 			If IsPMSixHPBelow40() Then
 
 				TargetOnPMSix()
-				MajorHeal()
+
+				While IsPMSixHPBelow40()
+
+					Battleheal()
+					Sleep(1250)
+
+				WEnd
 
 				$isSomeoneBelow40 = True
 
@@ -392,7 +444,7 @@ Func _HealMode()
 
 EndFunc
 
-Func _HealModeLegacy()
+Func _HealMode()
 
 	SuccessSound()
 
@@ -484,7 +536,14 @@ Func exec()
 While True
 
 	Sleep(1000)
-	Alert()
+
+	If IsPMFromOneToSixHPBelow40() Then
+
+			Beep(700, 40)
+Beep(700, 40)
+
+	EndIf
+
 
 WEnd
 

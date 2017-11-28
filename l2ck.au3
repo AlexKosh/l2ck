@@ -1566,7 +1566,7 @@ EndFunc
 
 Func TargetOnPMOne()
 
-	MouseClick("left", 85, 303, 2, 300)
+	MouseClick("left", 85, 303, 2,500)
 	Sleep(Random(211,344,1))
 
 EndFunc
@@ -1580,7 +1580,7 @@ EndFunc
 
 Func TargetOnPMTwo()
 
-	MouseClick("left", 85, 352, 2, 300)
+	MouseClick("left", 85, 352, 2, 500)
 	Sleep(Random(211,344,1))
 
 EndFunc
@@ -1594,7 +1594,7 @@ EndFunc
 
 Func TargetOnPMThree()
 
-	MouseClick("left", 85, 390, 2, 300)
+	MouseClick("left", 85, 390, 2, 500)
 	Sleep(Random(211,344,1))
 
 EndFunc
@@ -1608,7 +1608,7 @@ EndFunc
 
 Func TargetOnPMFour()
 
-	MouseClick("left", 85, 430, 2, 300)
+	MouseClick("left", 85, 430, 2, 500)
 	Sleep(Random(211,344,1))
 
 EndFunc
@@ -1622,14 +1622,14 @@ EndFunc
 
 Func TargetOnPMFive()
 
-	MouseClick("left", 85, 470, 2, 300)
+	MouseClick("left", 85, 470, 2, 500)
 	Sleep(Random(211,344,1))
 
 EndFunc
 
 Func TargetOnPMSix()
 
-	MouseClick("left", 85, 520, 2, 300)
+	MouseClick("left", 85, 520, 2, 100)
 	Sleep(Random(211,344,1))
 
 EndFunc
