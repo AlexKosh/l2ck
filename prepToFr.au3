@@ -10,9 +10,9 @@
 
 $LogFile = "debugtest.log"
 ;small = 265 / large = 1
-$toSmallY = 1
+$toSmallY = 265
 ;small = 275 / large 1
-$toSmallX = 1
+$toSmallX = 275
 
 HotKeySet("^{9}", "_Attack")
 HotKeySet("^{0}", "_HaltPrep")
@@ -78,7 +78,8 @@ Func _Attack()
 		 EndIf
 
 		While IsTargetExist()
-			Sleep(50)
+			Sleep(500)
+			TakeAssistFromPMOne()
 		WEnd
 
 		Sleep(Random(251,444,1))

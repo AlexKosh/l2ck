@@ -9,9 +9,9 @@
 
 $LogFile = "debugtest.log"
 ;small = 265 / large = 1
-$toSmallY = 1
+$toSmallY = 265
 ;small = 275 / large 1
-$toSmallX = 1
+$toSmallX = 275
 
 global $warcWOParty = False
 
@@ -39,7 +39,8 @@ global $BuffTimer = 0
 global $safePartyDismiss = 0
 global $safePDTimer = 0
 
-global $warcInParty = False
+global $warcInParty = True
+global $wcn = False
 
 HotKeySet("^{9}", "_SpoilMode")
 HotKeySet("^{0}", "_Halt")
@@ -53,13 +54,13 @@ Func CalculateStunChance()
 	;1 k 30 chance
 	If IsMyMPUpper30() Then
 		;70
-		$stunChance = 0
+		$stunChance = 70
 
 	EndIf
 	;1 k 3
 	If IsMyHPDamagedOver60() Then
 		;98
-		$stunChance = 0
+		$stunChance = 98
 
 	EndIf
 
@@ -236,6 +237,18 @@ Func SelectTarget()
 			AttackTarget()
 			Return
 		EndIf
+	 EndIf
+
+	 	;inache proveriaem target na sebe, potom nextTarget()
+	If IsPMThreeAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMThree()
+		If IsTargetExist() Then
+			$targetDetected = True
+			AttackTarget()
+			Return
+		EndIf
 	EndIf
 
 	;esli u PMTwo HP ne max to proveriaem target s nego
@@ -304,6 +317,17 @@ Func SelectTarget()
 			AttackTarget()
 			Return
 		EndIf
+	 EndIf
+
+	 	If IsPMThreeAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMThree()
+		If IsTargetExist() Then
+			$targetDetected = True
+			AttackTarget()
+			Return
+		EndIf
 	EndIf
 
 		;tut idet proverka ne napal li agro-mob i ne vzialsia li target avtomatom
@@ -356,6 +380,17 @@ Func SelectTarget()
 
 		;proveriaem ne sagrilsia li mob na party member one
 		TakeAssistFromPMTwo()
+		If IsTargetExist() Then
+			$targetDetected = True
+			AttackTarget()
+			Return
+		EndIf
+	 EndIf
+
+	 	If IsPMThreeAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMThree()
 		If IsTargetExist() Then
 			$targetDetected = True
 			AttackTarget()
@@ -421,6 +456,17 @@ Func SelectTarget()
 			AttackTarget()
 			Return
 		EndIf
+	 EndIf
+
+	 	If IsPMThreeAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMThree()
+		If IsTargetExist() Then
+			$targetDetected = True
+			AttackTarget()
+			Return
+		EndIf
 	EndIf
 
 		;tut idet proverka ne napal li agro-mob i ne vzialsia li target avtomatom
@@ -474,6 +520,17 @@ Func SelectTarget()
 
 		;proveriaem ne sagrilsia li mob na party member one
 		TakeAssistFromPMTwo()
+		If IsTargetExist() Then
+			$targetDetected = True
+			AttackTarget()
+			Return
+		EndIf
+	 EndIf
+
+	 	If IsPMThreeAttacked() Then
+
+		;proveriaem ne sagrilsia li mob na party member one
+		TakeAssistFromPMThree()
 		If IsTargetExist() Then
 			$targetDetected = True
 			AttackTarget()
@@ -673,7 +730,7 @@ Func DismissWCFromParty()
 
 	Sleep(Random(531,744,1))
 
-	If $safePartyDismiss > 46000 And $warcInParty = True Then
+	If $safePartyDismiss > 46000 And $warcInParty = True And $wcn = True Then
 
 		;press leave party on F12 third panels
 		MouseClick("left", 822, (890 - $toSmallY), 2, 200)
@@ -705,8 +762,8 @@ Func _SpoilMode()
 
 		Sweep()
 
-		PickUp()
-		PickUp()
+		;PickUp()
+		;PickUp()
 		;PickUp()
 		;PickUp()
 

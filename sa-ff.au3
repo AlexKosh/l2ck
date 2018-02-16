@@ -139,6 +139,41 @@ local $moveCount = 0;
 
 Func SelectTarget()
 
+	$isHalt = False
+
+	While $isHalt = False
+
+		TakeAssistFromPMOne()
+		DanceAndSong()
+
+		If IsTargetExist() Then
+		   Beep(600, 50)
+		   Beep(500, 50)
+		   Beep(700, 50)
+		   DanceAndSong()
+		   AttackF1()
+		 Else
+			Sleep(Random(151,244,1))
+			DanceAndSong()
+			ContinueLoop
+		 EndIf
+
+		While IsTargetExist()
+			Sleep(200)
+			TakeAssistFromPMOne()
+			DanceAndSong()
+		WEnd
+
+		Sleep(Random(251,444,1))
+
+	WEnd
+
+
+EndFunc
+
+
+Func SelectTargetLegacy()
+
 	HealMeIfYouCan()
 	DanceAndSong()
 
@@ -277,7 +312,7 @@ Func DanceAndSong()
 
 local $index = 2
 
-	If	$lastBuffTime > 750000 Then
+	If	$lastBuffTime > 123000 Then
 
 		$BuffTimer = TimerInit()
 
@@ -315,7 +350,7 @@ While $defeatedMobs < 9164
 
 	WEnd
 
-	Sweep()
+	;Sweep()
 
 	;MoveToPartymemberOne()
 

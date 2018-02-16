@@ -9,9 +9,9 @@
 
 $LogFile = "debugtest.log"
 ;small = 265 / large = 1
-$toSmallY = 1
+$toSmallY = 265
 ;small = 275 / large 1
-$toSmallX = 1
+$toSmallX = 275
 
 global $targetDetected = False
 global $pmOneThreatened = False
@@ -136,7 +136,7 @@ EndFunc
 Func Battleheal()
 
 	MouseClick("left", 515, (995 - $toSmallY), 2, 500)
-	Sleep(Random(70,170,1))
+	Sleep(Random(170,270,1))
 
 EndFunc
 
@@ -144,7 +144,7 @@ EndFunc
 Func GreaterHealRB()
 
 	MouseClick("left", 442, (995 - $toSmallY), 2, 500)
-	Sleep(Random(70,170,1))
+	Sleep(Random(670,770,1))
 
 EndFunc
 
@@ -170,7 +170,7 @@ Func _HealModeLegacy()
 				While IsPMOneHPBelow40()
 
 					Battleheal()
-					Sleep(1250)
+					Sleep(1850)
 
 				WEnd
 
@@ -564,10 +564,12 @@ Func _HealFirst()
 			If	IsPMOneHPBelow60() Then
 
 				MajorHeal()
+				Sleep(600)
 
 			EndIf
 
 			GreaterHeal()
+			Sleep(300)
 
 		EndIf
 
